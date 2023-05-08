@@ -23,7 +23,7 @@ canvas {
     padding: 0;
     margin: auto;
     display: block;
-    position: absolute;
+    
     top: 0;
     bottom: 0;
     left: 0;
@@ -33,4 +33,19 @@ canvas {
 footer {
     background: #e7cfb4;
     height: 5vh
+}
+
+#collapse_header {
+    height: 5vh;
+    background: #4f473e;
+}
+
+#collapse_container {
+    height: 90vh;
+    background: #4f473e;
+}
+
+#collapse_footer {
+    height: 5vh;
+    background: #4f473e;
 }

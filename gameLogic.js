@@ -7,9 +7,10 @@ const boldFont = "400 30px Sans-serif";
 
 const blankNum = 0;
 
+function getRandomInt(max) {return Math.floor(Math.random() * max);}
+
 // Board gets populated with negative numbers at start of game, negative numbers cannot be changed :O.
 // !!!!! I BET THE STRICT TYPE COMPARASON IS MESSING WITH MY CHECK VALID INPUT BECAUSE KEYBOARD INPUTS ARE STORED AS CHAR
-// Probably should just run check valid board becfore every time i draw board? or maybe I use it to populate board and then dictate user input
 let board = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -21,6 +22,8 @@ let board = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
+
+// ======== START OF DRAW FUNCTIONS =======
 
 // Make a 9x9 sqaure 
 // Every 3rd line is bold both vertically and horizontally
@@ -52,10 +55,10 @@ function drawGrid() {
     }
 }
 
-// x & y must be less than or equal to 8
+// x & y must be less than or equal to 9
 // chr must be a number
 // Draws a chr in the box with the coords x,y
-function placeNumber(x, y, chr) {
+function drawNumber(x, y, chr) {
 
     ctx.font = font;
 
@@ -68,9 +71,27 @@ function placeNumber(x, y, chr) {
     ctx.fillText(chr, (x + 0.4) * boxLength, (y + 0.7) * boxLength);
 }
 
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
+function drawAllNumbers() {
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            if (board[y][x] !== blankNum) {
+                drawNumber(x, y, board[y][x]);
+            }
+        }
+    }
 }
+
+function drawBoard() {
+    drawGrid();
+    drawAllNumbers();
+}
+
+function clearBoard() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// ======== END OF DRAW FUNCTIONS =======
+// ======== START OF BOARD LOGIC =======
 
 function resetBoard() {
     for (let x = 0; x < 9; x++) {
@@ -81,14 +102,15 @@ function resetBoard() {
 }
 
 // Place starting numbers in board
+// Does not guarentee board will be valid
 function populateBoard() {
     // Clear board to make sure populate board does not loop infinitely
     resetBoard();
 
     for (let x = 0; x < 9; x = x + 3) {
         for (let y = 0; y < 9; y = y + 3) {
-            // Put 3-5 numbers in each small 3x3 board
-            let numGivenNums = 3 + getRandomInt(3);
+            // Put 2-4 numbers in each small 3x3 board
+            let numGivenNums = 2 + getRandomInt(3);
             for (let i = 0; i < numGivenNums; i++) {
                 let randY = getRandomInt(3) + y;
                 let randX = getRandomInt(3) + x;
@@ -101,26 +123,6 @@ function populateBoard() {
             }
         }
     }
-
-}
-
-function drawNumbers() {
-    for (let x = 0; x < 9; x++) {
-        for (let y = 0; y < 9; y++) {
-            if (board[y][x] !== blankNum) {
-                placeNumber(x, y, board[y][x]);
-            }
-        }
-    }
-}
-
-function drawBoard() {
-    drawGrid();
-    drawNumbers();
-}
-
-function clearBoard() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function checkValidNum(x, y, num) {
@@ -129,6 +131,7 @@ function checkValidNum(x, y, num) {
     // Check valid row
     for (let j = 0; j < 9; j++) {
         if (Math.abs(board[y][j]) === Math.abs(num)) {
+            console.log("invalid row");
             return false;
         }
     }
@@ -137,6 +140,7 @@ function checkValidNum(x, y, num) {
     // Check valid Column
     for (let j = 0; j < 9; j++) {
         if (Math.abs(board[j][x]) === Math.abs(num)) {
+            console.log("invalid column");
             return false;
         }
     }
@@ -152,11 +156,13 @@ function checkValidNum(x, y, num) {
     for (let j = startingX; j < startingX + 3; j++) {
         for (let k = startingY; k < startingY + 3; k++) {
             if (Math.abs(board[k][j]) === Math.abs(num)) {
+                console.log("invalid mini box");
                 return false;
             }
         }
     }
 
+    console.log("valid pos");
     return true;
 }
 
@@ -167,9 +173,9 @@ let receiveInput = false;
 let currentSquareX = -1;
 let currentSquareY = -1;
 
-function getSquare(x) {
-    // How many lengths until get to current x pos.
-    return Math.floor(x / boxLength);
+function getSquare(pos) {
+    // How many lengths until get to current pos.
+    return Math.floor(pos / boxLength);
 }
 
 function selectSquare() {
@@ -216,17 +222,21 @@ function handleMouseEvent(e) {
 }
 
 function handleKeyEvent(e) {
-    if (/^[1-9]$/i.test(e.key)) {
-        if (receiveInput === true) {
-            // Check if trying to change starting num
-            if (board[currentSquareY][currentSquareX] >= 0) {
-                board[currentSquareY][currentSquareX] = parseInt(e.key);
-                clearBoard();
-                selectSquare();
-                drawBoard();
-            }
-        }
-    }
+    if (receiveInput == false) return;
+
+    // If key not 1-9 then return
+    if (!/^[1-9]$/i.test(e.key)) return;
+
+    // Check if trying to change starting num
+    if (board[currentSquareY][currentSquareX] < 0) return;
+
+    let num = parseInt(e.key);
+
+    if (!checkValidNum(currentSquareX, currentSquareY, num)) return;
+
+    board[currentSquareY][currentSquareX] = num;
+    selectSquare();
+    drawBoard();
 }
 
 // ========== TO RUN ========== 
