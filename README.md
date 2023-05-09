@@ -1,2 +1,2 @@
 # localSudoku
-Small sudoku game. No backend
+Simple Sudoku in JS
