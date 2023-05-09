@@ -3,9 +3,6 @@
     <head>
         <title>Sudoku</title>
         <link rel="stylesheet" href="style.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400&display=swap" rel="stylesheet">
     </head>
     <body>
         <header></header>
@@ -13,11 +10,11 @@
             <canvas id="canvas"></canvas>
         </main>
         <footer></footer>
-        <div id="collapse_header"></div>
-        <div id="collapse_container">
-            <canvas id="collapse"></canvas>
-        </div>
-        <div id="collapse_footer"></div>
+        <div id="collapse_header" class="collapseElement"></div>
+            <div id="collapse_container" class="collapseElement">
+                <canvas id="collapse" class="collapseElement"></canvas>
+            </div>
+        <div id="collapse_footer" class="collapseElement"></div>
     </body>
     <script src="windowLogic.js"></script>
     <script src="gameLogic.js"></script>

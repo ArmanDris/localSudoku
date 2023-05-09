@@ -1,25 +1,21 @@
-/*
-font-family: 'Nunito Sans', sans-serif;
-(has 200, 300, 400)
-*/
-
 * {
     padding: 0;
     margin: 0;
 }
 
+body {
+    background: #27241D;
+}
+
 header {
-    height: 5vh;
-    background: #e7cfb4;
+    height: 10vh;
 }
 
 main {
-    height: 90vh;
-    background: #e7cfb4;
+    height: 80vh;
 }
 canvas {
-    font-family: 'Nunito Sans';
-    background: white;
+    /*font-family: 'Nunito Sans';*/
     padding: 0;
     margin: auto;
     display: block;
@@ -31,8 +27,11 @@ canvas {
 }
 
 footer {
-    background: #e7cfb4;
-    height: 5vh
+    height: 10vh;
+}
+
+.collapseElement {
+    display: none;
 }
 
 #collapse_header {

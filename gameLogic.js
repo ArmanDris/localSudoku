@@ -1,16 +1,17 @@
-let lineThickness = 3;
+let lineThickness = 1;
 
-const boardColor = '#563232';
-const highlightColor = '#ADD8E6';
-const font = "100 30px Sans-serif";
-const boldFont = "400 30px Sans-serif";
+const boardColor = '#A39E93';
+const fontColor = '#FAF9F7';
+const boldColor = '#A39E93';
+const highlightColor = '#423D33';
+const font = "300 28px Sans-serif";
+const boldFont = "300 28px Sans-serif";
 
 const blankNum = 0;
 
 function getRandomInt(max) {return Math.floor(Math.random() * max);}
 
 // Board gets populated with negative numbers at start of game, negative numbers cannot be changed :O.
-// !!!!! I BET THE STRICT TYPE COMPARASON IS MESSING WITH MY CHECK VALID INPUT BECAUSE KEYBOARD INPUTS ARE STORED AS CHAR
 let board = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -32,9 +33,9 @@ function drawGrid() {
     for (let i = 1; i < 9; i++) {
         ctx.beginPath();
         if (i % 3 === 0) {
-            ctx.rect(i * boxLength - lineThickness, 0, lineThickness * 2, canvasLength);
+            ctx.rect(i * boxLength - lineThickness, 0, lineThickness + 2, canvasLength);
         } else {
-            ctx.rect(i * boxLength - (lineThickness/2), 0, lineThickness, canvasLength);
+            ctx.rect(i * boxLength - (lineThickness + 0), 0, lineThickness, canvasLength);
         }
         ctx.fillStyle = boardColor;
         ctx.fill();
@@ -45,9 +46,9 @@ function drawGrid() {
     for (let i = 1; i < 9; i++) {
         ctx.beginPath();
         if (i % 3 === 0) {
-            ctx.rect(0, i * boxLength - lineThickness, canvasLength, lineThickness * 2);
+            ctx.rect(0, i * boxLength - lineThickness, canvasLength, lineThickness + 2);
         } else {
-            ctx.rect(0, i * boxLength - (lineThickness/2), canvasLength, lineThickness);
+            ctx.rect(0, i * boxLength - (lineThickness + 0), canvasLength, lineThickness);
         }
         ctx.fillStyle = boardColor;
         ctx.fill();
@@ -61,10 +62,12 @@ function drawGrid() {
 function drawNumber(x, y, chr) {
 
     ctx.font = font;
+    ctx.fillStyle = fontColor;
 
     if (chr < 0) {
         chr = -chr;
         ctx.font = boldFont;
+        ctx.fillStyle = boldColor;
     }
 
     // draws text with bottom left part of character stating at x,y
@@ -127,6 +130,7 @@ function populateBoard() {
 
 function checkValidNum(x, y, num) {
     // Num must be only one of its kind on its row, column and mini box
+    if (num === 0) return true;
 
     // Check valid row
     for (let j = 0; j < 9; j++) {
@@ -179,6 +183,7 @@ function getSquare(pos) {
 }
 
 function selectSquare() {
+    clearBoard();
     ctx.beginPath();
     ctx.rect(boxLength * currentSquareX, boxLength * currentSquareY, boxLength, boxLength);
     ctx.fillStyle = highlightColor;
@@ -190,8 +195,8 @@ function selectSquare() {
 }
 
 function deselectSquare() {
-    clearBoard();
     receiveInput = false;
+    clearBoard();
     drawBoard();
 }
 
@@ -224,19 +229,19 @@ function handleMouseEvent(e) {
 function handleKeyEvent(e) {
     if (receiveInput == false) return;
 
-    // If key not 1-9 then return
-    if (!/^[1-9]$/i.test(e.key)) return;
+    // If key not 1-9 or SPACE then return
+    if (!/^[1-9 ]$/i.test(e.key)) return;
 
     // Check if trying to change starting num
     if (board[currentSquareY][currentSquareX] < 0) return;
 
-    let num = parseInt(e.key);
+    if (e.key === " ") num = 0;
+    else num = parseInt(e.key);
 
-    if (!checkValidNum(currentSquareX, currentSquareY, num)) return;
+    //if (!checkValidNum(currentSquareX, currentSquareY, num)) return;
 
     board[currentSquareY][currentSquareX] = num;
     selectSquare();
-    drawBoard();
 }
 
 // ========== TO RUN ========== 

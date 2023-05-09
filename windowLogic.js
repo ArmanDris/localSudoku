@@ -2,15 +2,16 @@ let main = document.getElementById('main');
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
-let canvasLength = main.clientHeight;
-let boxLength = canvasLength / 9;
-
 function initializeCanvasSize() {
     canvasLength = main.clientHeight;
     boxLength = canvasLength / 9;
 
-    canvas.height = canvasLength;
-    canvas.width = canvasLength;
+    // Need to double canvas size and then half it to make it not blurry
+    canvas.width = canvasLength * 2;
+    canvas.height = canvasLength * 2;
+    canvas.style.width = canvasLength + "px";
+    canvas.style.height = canvasLength + "px";
+    canvas.getContext('2d').scale(2,2)
 
     // If drawboard is defined then call it
     if (typeof drawBoard === 'function') {
