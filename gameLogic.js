@@ -1,5 +1,4 @@
 let lineThickness = 1;
-
 const boardColor = '#A39E93';
 const fontColor = '#FAF9F7';
 const boldColor = '#A39E93';
@@ -135,7 +134,6 @@ function checkValidNum(x, y, num) {
     // Check valid row
     for (let j = 0; j < 9; j++) {
         if (Math.abs(board[y][j]) === Math.abs(num)) {
-            console.log("invalid row");
             return false;
         }
     }
@@ -144,7 +142,6 @@ function checkValidNum(x, y, num) {
     // Check valid Column
     for (let j = 0; j < 9; j++) {
         if (Math.abs(board[j][x]) === Math.abs(num)) {
-            console.log("invalid column");
             return false;
         }
     }
@@ -160,13 +157,11 @@ function checkValidNum(x, y, num) {
     for (let j = startingX; j < startingX + 3; j++) {
         for (let k = startingY; k < startingY + 3; k++) {
             if (Math.abs(board[k][j]) === Math.abs(num)) {
-                console.log("invalid mini box");
                 return false;
             }
         }
     }
 
-    console.log("valid pos");
     return true;
 }
 

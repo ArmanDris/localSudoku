@@ -31,20 +31,17 @@ footer {
 }
 
 .collapseElement {
-    display: none;
+    background: #A39E93;
 }
 
 #collapse_header {
-    height: 5vh;
-    background: #4f473e;
+    height: 10vh;
 }
 
 #collapse_container {
-    height: 90vh;
-    background: #4f473e;
+    height: 80vh;
 }
 
 #collapse_footer {
-    height: 5vh;
-    background: #4f473e;
+    height: 10vh;
 }

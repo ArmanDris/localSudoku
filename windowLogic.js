@@ -1,3 +1,9 @@
+window.addEventListener('keydown', function(e) {
+    if (e.key === ' ' && e.target == document.body) {
+        e.preventDefault();
+    }
+});
+
 let main = document.getElementById('main');
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
@@ -11,7 +17,7 @@ function initializeCanvasSize() {
     canvas.height = canvasLength * 2;
     canvas.style.width = canvasLength + "px";
     canvas.style.height = canvasLength + "px";
-    canvas.getContext('2d').scale(2,2)
+    canvas.getContext('2d').scale(2,2);
 
     // If drawboard is defined then call it
     if (typeof drawBoard === 'function') {
@@ -38,14 +44,15 @@ initializeCanvasSize();
 // ========== COLLAPSE SETUP ========== 
 let collapse_container = document.getElementById('collapse_container');
 let collapse_canvas = document.getElementById("collapse");
-let collapse_ctx = canvas.getContext("2d");
+let collapse_ctx = collapse_canvas.getContext("2d");
 
 function initializeCollapseCanvasSize() {
-    // canvas length will be height of main
-    collapse_canvas.height = canvasLength;
-    collapse_canvas.width = canvasLength;
+    collapse_canvas.width = canvasLength * 2;
+    collapse_canvas.height = canvasLength * 2;
+    collapse_canvas.style.width = canvasLength + "px";
+    collapse_canvas.style.height = canvasLength + "px";
+    collapse_canvas.getContext('2d').scale(2,2);
 }
 
 window.addEventListener('resize', initializeCollapseCanvasSize, false);
-
 initializeCollapseCanvasSize();
