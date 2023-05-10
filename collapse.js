@@ -60,6 +60,8 @@ function drawCollapseNumbers(x, y) {
 
     // Need to draw superposition
     else {
+        collapse_ctx.font = font;
+        collapse_ctx.fillText(boardValue, (x + 0.4) * boxLength, (y + 0.7) * boxLength);
 
     }
     console.log(boardValue.length)
