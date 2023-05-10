@@ -1,9 +1,9 @@
 const collapseBoardColor = '#27241D';
-const collapseFont = "300 4px Sans-serif";
+const collapseFont = "300 15px Sans-serif";
 const ds = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 let collapseBoard = [];
-collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
+collapseBoard.push([[1], ds, ds, ds, ds, ds, ds, ds, ds]);
 collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
 collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
 collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
@@ -45,8 +45,9 @@ function drawCollapseGrid() {
 
 // Draw all possible values square at x,y can take
 function drawCollapseNumbers(x, y) {
-    // Every square should be split into a grid of nine smaller squares
-    // Each number the square can take will appear in the square
+    let top_x = x * boxLength;
+    let top_y = y * boxLength;
+
     collapse_ctx.fillStyle = collapseBoardColor;
 
     let boardValue = collapseBoard[y][x];
@@ -54,17 +55,34 @@ function drawCollapseNumbers(x, y) {
     // Just draw character
     if (boardValue.length === 1) {
         // draws text with bottom left part of character stating at x,y
+        if (boardValue[0] < 0) { boardValue[0] = -boardValue[0]; }
+
         collapse_ctx.font = font;
         collapse_ctx.fillText(boardValue, (x + 0.4) * boxLength, (y + 0.7) * boxLength);
     }
 
     // Need to draw superposition
     else {
-        collapse_ctx.font = font;
-        collapse_ctx.fillText(boardValue, (x + 0.4) * boxLength, (y + 0.7) * boxLength);
+        let mini_box_length = (1/3 * boxLength);
+        let box_padding = boxLength/10;
 
+        for (let i = 1; i < 3; i++) {
+            collapse_ctx.beginPath();
+            collapse_ctx.rect(top_x + i*mini_box_length, top_y + box_padding, 1, boxLength - box_padding * 2);
+            collapse_ctx.rect(top_x + box_padding, top_y + i*mini_box_length, boxLength - box_padding * 2, 1);
+            collapse_ctx.fillStyle = collapseBoardColor;
+            collapse_ctx.fill();
+            collapse_ctx.closePath();
+        }
+
+        // What a nightmare of positioning values.
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                collapse_ctx.font = collapseFont;
+                collapse_ctx.fillText(boardValue[j + (i*3)], top_x + (j+0.3) * mini_box_length, top_y + (i+0.8) * mini_box_length);
+            }
+        }
     }
-    console.log(boardValue.length)
 }
 
 function drawAllCollapseNumbers() {
@@ -77,8 +95,18 @@ function drawAllCollapseNumbers() {
 
 // Updates collapseBoard to match board
 function syncBoards() {
-    // 
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            if (board[y][x] !== blankNum) {
+                collapseBoard[y][x] = [board[y][x]];
+                // Remove all of val from row
+                // Remove all of val from column
+                // Remove all of val from box
+            }
+        }
+    }
 }
 
+syncBoards();
 drawCollapseGrid();
 drawAllCollapseNumbers();
