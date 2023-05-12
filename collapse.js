@@ -3,7 +3,7 @@ const collapseFont = "300 15px Sans-serif";
 const ds = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 let collapseBoard = [];
-collapseBoard.push([[1], ds, ds, ds, ds, ds, ds, ds, ds]);
+collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
 collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
 collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
 collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
@@ -63,13 +63,13 @@ function drawCollapseNumbers(x, y) {
 
     // Need to draw superposition
     else {
-        let mini_box_length = (1/3 * boxLength);
-        let box_padding = boxLength/10;
+        let mini_box_length = (1 / 3 * boxLength);
+        let box_padding = boxLength / 10;
 
         for (let i = 1; i < 3; i++) {
             collapse_ctx.beginPath();
-            collapse_ctx.rect(top_x + i*mini_box_length, top_y + box_padding, 1, boxLength - box_padding * 2);
-            collapse_ctx.rect(top_x + box_padding, top_y + i*mini_box_length, boxLength - box_padding * 2, 1);
+            collapse_ctx.rect(top_x + i * mini_box_length, top_y + box_padding, 1, boxLength - box_padding * 2);
+            collapse_ctx.rect(top_x + box_padding, top_y + i * mini_box_length, boxLength - box_padding * 2, 1);
             collapse_ctx.fillStyle = collapseBoardColor;
             collapse_ctx.fill();
             collapse_ctx.closePath();
@@ -79,7 +79,9 @@ function drawCollapseNumbers(x, y) {
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 collapse_ctx.font = collapseFont;
-                collapse_ctx.fillText(boardValue[j + (i*3)], top_x + (j+0.3) * mini_box_length, top_y + (i+0.8) * mini_box_length);
+                if (typeof boardValue[j + (i * 3)] !== "undefined") {
+                    collapse_ctx.fillText(boardValue[j + (i * 3)], top_x + (j + 0.3) * mini_box_length, top_y + (i + 0.8) * mini_box_length);
+                }
             }
         }
     }
@@ -97,14 +99,36 @@ function drawAllCollapseNumbers() {
 function syncBoards() {
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
-            if (board[y][x] !== blankNum) {
-                collapseBoard[y][x] = [board[y][x]];
-                // Remove all of val from row
-                // Remove all of val from column
-                // Remove all of val from box
+            let num = board[y][x];
+            if (num !== blankNum) {
+                collapseBoard[y][x] = [num];
             }
         }
     }
+
+
+    for (let x = 0; x < 9; x++) {
+        if (collapseBoard[0][x].length === 1) {
+            let num = collapseBoard[0][x][0];
+            for (let i = 0; i < 9; i++) {
+                if (i !== x) {
+                    // Need index positive and negative because board number may be positive or negative
+                    let index_positive = collapseBoard[0][i].indexOf(num);
+                    let index_negative = collapseBoard[0][i].indexOf(-num);
+
+                    if (index_positive > -1) {
+                        collapseBoard[0][i].splice(index_positive, 1);
+                    }
+
+                    if (index_negative > -1) {
+                        collapseBoard[0][i].splice(index_negative, 1);
+                    }
+                }
+            }
+        }
+    }
+    // Remove all of val from column
+    // Remove all of val from box
 }
 
 syncBoards();

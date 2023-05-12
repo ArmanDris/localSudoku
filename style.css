@@ -32,6 +32,7 @@ footer {
 
 .collapseElement {
     background: #A39E93;
+    display: default;
 }
 
 #collapse_header {
