@@ -52,6 +52,10 @@ function initializeCollapseCanvasSize() {
     collapse_canvas.style.width = canvasLength + "px";
     collapse_canvas.style.height = canvasLength + "px";
     collapse_canvas.getContext('2d').scale(2,2);
+
+    if (typeof drawCollapseBoard === 'function') {
+        drawCollapseBoard();
+    }
 }
 
 window.addEventListener('resize', initializeCollapseCanvasSize, false);

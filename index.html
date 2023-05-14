@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Sudoku</title>
-        <link rel="icon" type="image/x-icon" href="favicon.ico">
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <header></header>
-        <main id="main">
-            <canvas id="canvas"></canvas>
-        </main>
-        <footer></footer>
-        <div id="collapse_header" class="collapseElement"></div>
-            <div id="collapse_container" class="collapseElement">
-                <canvas id="collapse" class="collapseElement"></canvas>
-            </div>
-        <div id="collapse_footer" class="collapseElement"></div>
-    </body>
-    <script src="windowLogic.js"></script>
-    <script src="gameLogic.js"></script>
-    <script src="collapse.js"></script>
+
+<head>
+    <title>Sudoku</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header></header>
+    <main id="main">
+        <canvas id="canvas"></canvas>
+    </main>
+    <footer></footer>
+    <div id="collapse_elements">
+        <div id="collapse_header"></div>
+        <div id="collapse_container">
+            <canvas id="collapse"></canvas>
+        </div>
+        <div id="collapse_footer"></div>
+    </div>
+</body>
+<script src="windowLogic.js"></script>
+<script src="gameLogic.js"></script>
+<script src="collapse.js"></script>
+
 </html>

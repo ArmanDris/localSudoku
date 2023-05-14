@@ -1,17 +1,11 @@
 const collapseBoardColor = '#27241D';
 const collapseFont = "300 15px Sans-serif";
-const ds = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-let collapseBoard = [];
-collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
-collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
-collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
-collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
-collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
-collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
-collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
-collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
-collapseBoard.push([ds, ds, ds, ds, ds, ds, ds, ds, ds]);
+const possible_values = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let collapseBoard = Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => possible_values.slice()));
+
+// MAJOR OVERSIGHT: SYNC BOARDS TREATS SUPERPOSITION WITH ONE VALUE AS DEFINITE VALUES. THATS NOT HOW THAT WORKS
+// FIX: Negative values in sync board are definite, non negatives are uncollapsed
 
 // Make a 9x9 sqaure 
 // Every 3rd line is bold both vertically and horizontally
@@ -53,7 +47,7 @@ function drawCollapseNumbers(x, y) {
     let boardValue = collapseBoard[y][x];
 
     // Just draw character
-    if (boardValue.length === 1) {
+    if (boardValue.length === 1 && boardValue[0] < 0) {
         // draws text with bottom left part of character stating at x,y
         if (boardValue[0] < 0) { boardValue[0] = -boardValue[0]; }
 
@@ -95,33 +89,81 @@ function drawAllCollapseNumbers() {
     }
 }
 
-// Updates collapseBoard to match board
+function clearCollapseBoard() {
+    collapse_ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawCollapseBoard() {
+    clearCollapseBoard();
+    drawCollapseGrid();
+    drawAllCollapseNumbers();
+}
+
+// Updates collapseBoard to match board. Sets all numbers to negative
 function syncBoards() {
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             let num = board[y][x];
-            if (num !== blankNum) {
-                collapseBoard[y][x] = [num];
+            if (num === blankNum) {
+                collapseBoard[y][x] = [...possible_values];
+            }
+            else {
+                if (num > 0) {
+                    collapseBoard[y][x] = [-num];
+                }
+                else {
+                    collapseBoard[y][x] = [num];
+                }
             }
         }
     }
 
 
-    for (let x = 0; x < 9; x++) {
-        if (collapseBoard[0][x].length === 1) {
-            let num = collapseBoard[0][x][0];
-            for (let i = 0; i < 9; i++) {
-                if (i !== x) {
-                    // Need index positive and negative because board number may be positive or negative
-                    let index_positive = collapseBoard[0][i].indexOf(num);
-                    let index_negative = collapseBoard[0][i].indexOf(-num);
+    // Look through all cells in row x and column y
+    for (let y = 0; y < 9; y++) {
+        for (let x = 0; x < 9; x++) {
+            if (collapseBoard[y][x].length === 1 && collapseBoard[y][x][0] < 0) {
+                // Once we find a definite value we need to:
+                let num = collapseBoard[y][x][0];
+                // 1: Remove the value from all the superpositions in row
+                for (let i = 0; i < 9; i++) {
+                    if (i !== x) {
+                        let index_positive = collapseBoard[y][i].indexOf(-num);
 
-                    if (index_positive > -1) {
-                        collapseBoard[0][i].splice(index_positive, 1);
+                        if (index_positive > -1) {
+                            collapseBoard[y][i].splice(index_positive, 1);
+                        }
                     }
+                }
 
-                    if (index_negative > -1) {
-                        collapseBoard[0][i].splice(index_negative, 1);
+                // 2: Remove value from all superpositions in column
+                for (let i = 0; i < 9; i++) {
+                    if (i !== y) {
+                        let index_negative = collapseBoard[i][x].indexOf(-num);
+
+                        if (index_negative > -1) {
+                            collapseBoard[i][x].splice(index_negative, 1);
+                        }
+                    }
+                }
+
+                // 3: Remove value from all superpositions in mini box
+                let miniGridX = Math.floor(x / 3);
+                let miniGridY = Math.floor(y / 3);
+
+                let startingX = miniGridX * 3;
+                let startingY = miniGridY * 3;
+
+                // Check valid mini box
+                for (let j = startingX; j < startingX + 3; j++) {
+                    for (let k = startingY; k < startingY + 3; k++) {
+                        if (j !== x && k !== y) {
+                            let index_negative = collapseBoard[k][j].indexOf(-num);
+    
+                            if (index_negative > -1) {
+                                collapseBoard[k][j].splice(index_negative, 1);
+                            }
+                        }
                     }
                 }
             }
@@ -132,5 +174,4 @@ function syncBoards() {
 }
 
 syncBoards();
-drawCollapseGrid();
-drawAllCollapseNumbers();
+drawCollapseBoard();

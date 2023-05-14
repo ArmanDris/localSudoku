@@ -236,9 +236,11 @@ function handleKeyEvent(e) {
     //if (!checkValidNum(currentSquareX, currentSquareY, num)) return;
 
     board[currentSquareY][currentSquareX] = num;
+    syncBoards();
+    drawCollapseBoard();
     selectSquare();
 }
 
 // ========== TO RUN ========== 
-populateBoard();
+//populateBoard();
 drawBoard();

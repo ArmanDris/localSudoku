@@ -30,13 +30,17 @@ footer {
     height: 10vh;
 }
 
-.collapseElement {
+#collapse_elements {
     background: #A39E93;
     display: default;
+    position: absolute;
+    top: 0;
+    left: 75%;
 }
 
 #collapse_header {
     height: 10vh;
+    background: #27241D;
 }
 
 #collapse_container {
@@ -45,4 +49,5 @@ footer {
 
 #collapse_footer {
     height: 10vh;
+    background: #27241D;
 }
