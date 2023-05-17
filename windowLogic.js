@@ -60,3 +60,19 @@ function initializeCollapseCanvasSize() {
 
 window.addEventListener('resize', initializeCollapseCanvasSize, false);
 initializeCollapseCanvasSize();
+
+class Referee {
+    constructor() {
+        this.b = new Board();
+        this.c = new Collapse();
+    }
+
+    setup_board() {
+        this.b.generateBoard();
+        this.c.drawCollapseBoard();
+        this.b.drawBoard();
+    }
+}
+
+let referee = new Referee;
+referee.setup_board();
