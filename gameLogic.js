@@ -8,7 +8,7 @@ const boldFont = "300 28px Sans-serif";
 
 const blankNum = 0;
 
-function getRandomInt(max) {return Math.floor(Math.random() * max);}
+function getRandomInt(max) { return Math.floor(Math.random() * max); }
 
 // Board gets populated with negative numbers at start of game, negative numbers cannot be changed :O.
 let board = [
@@ -116,7 +116,7 @@ function populateBoard() {
             for (let i = 0; i < numGivenNums; i++) {
                 let randY = getRandomInt(3) + y;
                 let randX = getRandomInt(3) + x;
-                let randNum = -1*(1 + getRandomInt(9));
+                let randNum = -1 * (1 + getRandomInt(9));
                 if (board[randY][randX] === blankNum && checkValidNum(randX, randY, randNum)) {
                     board[randY][randX] = randNum;
                 } else {
@@ -127,6 +127,53 @@ function populateBoard() {
     }
 }
 
+// Generate a board with one possible solution
+function generateBoard() {
+    // This logic actually sucks lol. It just generates 3 values
+    // THERE is some existential issues with this function. Namely it will just keep collapsing the same number 
+    // Even when its reduced to one number because it is the lowest. Also I worry that it will keep trying to place
+    // values around other values but thats ok because we can just remove numbers randomly after that.
+    // Should place random numbers in board until either makes the board impossible or fills out board.
+    for (let i = 0; i < 3; i++) {
+        // Logic for random numbers:
+        // - Make list of cells with lowest number of possible values
+        let lowest_num_values = 9;
+        // Array with two ints representing the coordinates of each cell
+        let list_of_cells_to_collapse = [];
+
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
+                // If cell has the same number of superpositions as the lowest add it to the array
+                if (collapseBoard[y][x].length > 1) {
+                    if (collapseBoard[y][x].length === lowest_num_values) {
+                        list_of_cells_to_collapse.push([x, y]);
+                    }
+                    // If we find a cell with less values than the lowest number of values then reset the array and store current cell
+                    if (collapseBoard[y][x].length < lowest_num_values) {
+                        list_of_cells_to_collapse = [];
+                        list_of_cells_to_collapse.push([x, y]);
+                    }
+                }
+            }
+        }
+        // - Randomly choose a cell from the list]
+        let randomListIndex = Math.floor(Math.random() * list_of_cells_to_collapse.length);
+        let randomListCoord = list_of_cells_to_collapse[randomListIndex];
+
+        // - Randomly collapse the cell into one of its possible values
+        let randomCellIndex = Math.floor(Math.random() * collapseBoard[randomListCoord[1]][randomListCoord[0]].length);
+        board[randomListCoord[0]][randomListCoord[1]] = -collapseBoard[randomListCoord[1]][randomListCoord[0]][randomCellIndex];
+
+
+
+
+        // If there is ever a cell with 0 possible values then restart process
+
+        syncBoards();
+    }
+}
+
+// This function will likely be obsoleted by wave fn logic
 function checkValidNum(x, y, num) {
     // Num must be only one of its kind on its row, column and mini box
     if (num === 0) return true;
@@ -147,8 +194,8 @@ function checkValidNum(x, y, num) {
     }
 
 
-    let miniGridX = Math.floor(x/3);
-    let miniGridY = Math.floor(y/3);
+    let miniGridX = Math.floor(x / 3);
+    let miniGridY = Math.floor(y / 3);
 
     let startingX = miniGridX * 3;
     let startingY = miniGridY * 3;
@@ -242,5 +289,3 @@ function handleKeyEvent(e) {
 }
 
 // ========== TO RUN ========== 
-//populateBoard();
-drawBoard();

@@ -169,9 +169,10 @@ function syncBoards() {
             }
         }
     }
-    // Remove all of val from column
-    // Remove all of val from box
+    drawCollapseBoard();
 }
 
 syncBoards();
-drawCollapseBoard();
+// GameLogic functions:
+generateBoard();
+drawBoard();
