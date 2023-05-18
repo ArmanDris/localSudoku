@@ -1,3 +1,4 @@
+// Prevent spacebar from scrolling page
 window.addEventListener('keydown', function(e) {
     if (e.key === ' ' && e.target == document.body) {
         e.preventDefault();
@@ -27,17 +28,6 @@ function initializeCanvasSize() {
 
 window.addEventListener('resize', initializeCanvasSize, false);
 
-window.addEventListener('mousedown', e => {handleInput(e);});
-window.addEventListener('keydown', e => {handleInput(e)});
-
-function handleInput(e) {
-    if (e instanceof MouseEvent) {
-        handleMouseEvent(e);
-    } else {
-        handleKeyEvent(e);
-    }
-}
-
 // ========== TO RUN ========== 
 initializeCanvasSize();
 
@@ -64,15 +54,28 @@ initializeCollapseCanvasSize();
 class Referee {
     constructor() {
         this.b = new Board();
-        this.c = new Collapse();
+        this.c = new Collapse(this.b);
     }
 
     setup_board() {
-        this.b.generateBoard();
+        //this.b.generateBoard();
         this.c.drawCollapseBoard();
         this.b.drawBoard();
+    }
+
+    handleInput(e) {
+        if (e instanceof MouseEvent) {
+            this.b.handleMouseEvent(e);
+        } else {
+            this.b.handleKeyEvent(e);
+            this.c.syncBoards();
+            this.c.drawCollapseBoard();
+        }
     }
 }
 
 let referee = new Referee;
 referee.setup_board();
+
+window.addEventListener('mousedown', e => {referee.handleInput(e);});
+window.addEventListener('keydown', e => {referee.handleInput(e);});

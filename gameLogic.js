@@ -34,6 +34,8 @@ class Board {
     // Make a 9x9 sqaure 
     // Every 3rd line is bold both vertically and horizontally
     drawGrid() {
+    let lineThickness = this.lineThickness;
+    let boardColor = this.boardColor;
         // Vertixal lines
         for (let i = 1; i < 9; i++) {
             ctx.beginPath();
@@ -66,13 +68,13 @@ class Board {
     // Draws a chr in the box with the coords x,y
     drawNumber(x, y, chr) {
 
-        ctx.font = font;
-        ctx.fillStyle = fontColor;
+        ctx.font = this.font;
+        ctx.fillStyle = this.fontColor;
 
         if (chr < 0) {
             chr = -chr;
-            ctx.font = boldFont;
-            ctx.fillStyle = boldColor;
+            ctx.font = this.boldFont;
+            ctx.fillStyle = this.boldColor;
         }
 
         // draws text with bottom left part of character stating at x,y
@@ -82,20 +84,25 @@ class Board {
     drawAllNumbers() {
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                if (board[y][x] !== blankNum) {
-                    drawNumber(x, y, board[y][x]);
+                if (this.board[y][x] !== this.blankNum) {
+                    this.drawNumber(x, y, this.board[y][x]);
                 }
             }
         }
     }
 
     drawBoard() {
-        drawGrid();
-        drawAllNumbers();
+        this.drawGrid();
+        this.drawAllNumbers();
     }
 
     clearBoard() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // ======== GETTERS & SETTERS =======
+    getValueOfCell(x,y) {
+        return this.board[y][x];
     }
 
     // ======== START OF BOARD LOGIC =======
@@ -223,21 +230,21 @@ class Board {
     }
 
     selectSquare() {
-        clearBoard();
+        this.clearBoard();
         ctx.beginPath();
-        ctx.rect(boxLength * currentSquareX, boxLength * currentSquareY, boxLength, boxLength);
-        ctx.fillStyle = highlightColor;
+        ctx.rect(boxLength * this.currentSquareX, boxLength * this.currentSquareY, boxLength, boxLength);
+        ctx.fillStyle = this.highlightColor;
         ctx.fill();
         ctx.closePath();
 
-        drawBoard();
-        receiveInput = true;
+        this.drawBoard();
+        this.receiveInput = true;
     }
 
     deselectSquare() {
-        receiveInput = false;
-        clearBoard();
-        drawBoard();
+        this.receiveInput = false;
+        this.clearBoard();
+        this.drawBoard();
     }
 
     // True if x, y is within canvas
@@ -250,40 +257,39 @@ class Board {
     }
 
     handleMouseEvent(e) {
-        if (isInCanvas(e.clientX, e.clientY)) {
+        if (this.isInCanvas(e.clientX, e.clientY)) {
             // Mouse click was inside the canvas!
             const rect = canvas.getBoundingClientRect();
             let clickX = e.clientX - rect.left;
             let clickY = e.clientY - rect.top;
     
-            currentSquareX = getSquare(clickX);
-            currentSquareY = getSquare(clickY);
+            this.currentSquareX = this.getSquare(clickX);
+            this.currentSquareY = this.getSquare(clickY);
     
-            deselectSquare();
-            selectSquare();
+            this.deselectSquare();
+            this.selectSquare();
         } else {
-            deselectSquare();
+            this.deselectSquare();
         }
     }
 
     handleKeyEvent(e) {
-        if (receiveInput == false) return;
+        if (this.receiveInput == false) return;
     
         // If key not 1-9 or SPACE then return
         if (!/^[1-9 ]$/i.test(e.key)) return;
     
         // Check if trying to change starting num
-        if (board[currentSquareY][currentSquareX] < 0) return;
+        if (this.board[this.currentSquareY][this.currentSquareX] < 0) return;
     
+        let num = 0;
         if (e.key === " ") num = 0;
         else num = parseInt(e.key);
     
         //if (!checkValidNum(currentSquareX, currentSquareY, num)) return;
     
-        board[currentSquareY][currentSquareX] = num;
-        syncBoards();
-        drawCollapseBoard();
-        selectSquare();
+        this.board[this.currentSquareY][this.currentSquareX] = num;
+        this.selectSquare();
     }
 
     // ========== MISC FUNCTIONS ==========
