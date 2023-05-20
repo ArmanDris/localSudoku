@@ -15,24 +15,24 @@ class Referee {
         this.b.drawBoard();
     }
 
-    handleInput(e) {
+    handleMouseDown(e) {
+        this.b.handleMouseEvent(e);
+    }
+
+    handleKeyDown(e) {
         if (e.key === ' ' && e.target == document.body);
             e.preventDefault();
 
-        if (e instanceof MouseEvent) {
-            this.b.handleMouseEvent(e);
-        } else {
-            this.b.handleKeyEvent(e);
-            this.c.syncBoards();
-            this.c.drawCollapseBoard();
-        }
+        this.b.handleKeyEvent(e);
+        this.c.syncBoards();
+        this.c.drawCollapseBoard();
     }
 }
 
 let referee = new Referee;
 referee.setup_board();
 
-window.addEventListener('mousedown', e => {referee.handleInput(e);});
-window.addEventListener('keydown', e => {referee.handleInput(e);});
+window.addEventListener('mousedown', e => {referee.handleMouseDown(e);});
+window.addEventListener('keydown', e => {referee.handleKeyDown(e);});
 
 window.addEventListener('resize',() => referee.resize_board(), false);
