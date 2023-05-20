@@ -16,6 +16,9 @@ class Referee {
     }
 
     handleInput(e) {
+        if (e.key === ' ' && e.target == document.body);
+            e.preventDefault();
+
         if (e instanceof MouseEvent) {
             this.b.handleMouseEvent(e);
         } else {
@@ -28,18 +31,6 @@ class Referee {
 
 let referee = new Referee;
 referee.setup_board();
-
-function handle_resize() {
-    referee.resize_board();
-    console.log("called handle resize");
-}
-
-// Prevent spacebar from scrolling page
-window.addEventListener('keydown', function(e) {
-    if (e.key === ' ' && e.target == document.body) {
-        e.preventDefault();
-    }
-});
 
 window.addEventListener('mousedown', e => {referee.handleInput(e);});
 window.addEventListener('keydown', e => {referee.handleInput(e);});
