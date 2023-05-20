@@ -1,6 +1,12 @@
 class Board {
     constructor() {
         // ======== DRAW VARIABLES =======
+        this.main = document.getElementById('main');
+        this.canvas = document.getElementById("canvas");
+        this.ctx = this.canvas.getContext("2d");
+
+        this.initializeCanvasSize();
+
         this.lineThickness = 1;
         this.boardColor = '#A39E93';
         this.fontColor = '#FAF9F7';
@@ -31,11 +37,26 @@ class Board {
     }
 
     // ======== START OF DRAW FUNCTIONS =======
+    initializeCanvasSize() {
+        this.canvasLength = this.main.clientHeight;
+        this.boxLength = this.canvasLength / 9;
+    
+        // Need to double canvas size and then half it to make it not blurry
+        canvas.width = this.canvasLength * 2;
+        canvas.height = this.canvasLength * 2;
+        canvas.style.width = this.canvasLength + "px";
+        canvas.style.height = this.canvasLength + "px";
+        canvas.getContext('2d').scale(2,2);
+    }
+
     // Make a 9x9 sqaure 
     // Every 3rd line is bold both vertically and horizontally
     drawGrid() {
     let lineThickness = this.lineThickness;
     let boardColor = this.boardColor;
+    let boxLength = this.boxLength;
+    let canvasLength = this.canvasLength;
+    let ctx = this.ctx;
         // Vertixal lines
         for (let i = 1; i < 9; i++) {
             ctx.beginPath();
@@ -67,7 +88,7 @@ class Board {
     // chr must be a number
     // Draws a chr in the box with the coords x,y
     drawNumber(x, y, chr) {
-
+        let ctx = this.ctx;
         ctx.font = this.font;
         ctx.fillStyle = this.fontColor;
 
@@ -78,7 +99,7 @@ class Board {
         }
 
         // draws text with bottom left part of character stating at x,y
-        ctx.fillText(chr, (x + 0.4) * boxLength, (y + 0.7) * boxLength);
+        ctx.fillText(chr, (x + 0.4) * this.boxLength, (y + 0.7) * this.boxLength);
     }
 
     drawAllNumbers() {
@@ -97,7 +118,7 @@ class Board {
     }
 
     clearBoard() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
     // ======== GETTERS & SETTERS =======
@@ -109,7 +130,7 @@ class Board {
     resetBoard() {
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                board[y][x] = blankNum;
+                this.board[y][x] = this.blankNum;
             }
         }
     }
@@ -118,18 +139,18 @@ class Board {
     // Does not guarentee board will be valid
     populateBoard() {
         // Clear board to make sure populate board does not loop infinitely
-        resetBoard();
+        this.resetBoard();
 
         for (let x = 0; x < 9; x = x + 3) {
             for (let y = 0; y < 9; y = y + 3) {
                 // Put 2-4 numbers in each small 3x3 board
-                let numGivenNums = 2 + getRandomInt(3);
+                let numGivenNums = 2 + this.getRandomInt(3);
                 for (let i = 0; i < numGivenNums; i++) {
-                    let randY = getRandomInt(3) + y;
-                    let randX = getRandomInt(3) + x;
-                    let randNum = -1 * (1 + getRandomInt(9));
-                    if (board[randY][randX] === blankNum && checkValidNum(randX, randY, randNum)) {
-                        board[randY][randX] = randNum;
+                    let randY = this.getRandomInt(3) + y;
+                    let randX = this.getRandomInt(3) + x;
+                    let randNum = -1 * (1 + this.getRandomInt(9));
+                    if (this.board[randY][randX] === this.blankNum && this.checkValidNum(randX, randY, randNum)) {
+                        this.board[randY][randX] = randNum;
                     } else {
                         i--;
                     }
@@ -191,7 +212,7 @@ class Board {
 
         // Check valid row
         for (let j = 0; j < 9; j++) {
-            if (Math.abs(board[y][j]) === Math.abs(num)) {
+            if (Math.abs(this.board[y][j]) === Math.abs(num)) {
                 return false;
             }
         }
@@ -199,7 +220,7 @@ class Board {
 
         // Check valid Column
         for (let j = 0; j < 9; j++) {
-            if (Math.abs(board[j][x]) === Math.abs(num)) {
+            if (Math.abs(this.board[j][x]) === Math.abs(num)) {
                 return false;
             }
         }
@@ -214,7 +235,7 @@ class Board {
         // Check valid mini box
         for (let j = startingX; j < startingX + 3; j++) {
             for (let k = startingY; k < startingY + 3; k++) {
-                if (Math.abs(board[k][j]) === Math.abs(num)) {
+                if (Math.abs(this.board[k][j]) === Math.abs(num)) {
                     return false;
                 }
             }
@@ -226,10 +247,12 @@ class Board {
     // ======== START OF INPUT HANDLING =======
     getSquare(pos) {
         // How many lengths until get to current pos.
-        return Math.floor(pos / boxLength);
+        return Math.floor(pos / this.boxLength);
     }
 
     selectSquare() {
+        let boxLength = this.boxLength;
+        let ctx = this.ctx;
         this.clearBoard();
         ctx.beginPath();
         ctx.rect(boxLength * this.currentSquareX, boxLength * this.currentSquareY, boxLength, boxLength);

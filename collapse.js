@@ -1,20 +1,42 @@
 class Collapse {
     constructor(board) {
+        this.b = board;
+
         // ======== DRAW VARIABLES =======
+        this.collapse_container = document.getElementById('collapse_container');
+        this.collapse_canvas = document.getElementById("collapse");
+        this.collapse_ctx = this.collapse_canvas.getContext("2d");
+
+        this.initializeCollapseCanvasSize();
+
         this.collapseBoardColor = '#27241D';
         this.collapseFont = "300 15px Sans-serif";
 
         // ======== BOARD LOGIC VARIABLES =======
-        this.b = board;
         this.possible_values = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         this.collapseBoard = Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => this.possible_values.slice()));
     }
 
     // ======== START OF DRAW FUNCTIONS =======
+    initializeCollapseCanvasSize() {
+        this.canvasLength = this.b.main.clientHeight;
+        this.boxLength = this.b.canvasLength / 9;
+
+        this.collapse_canvas.width = this.canvasLength * 2;
+        this.collapse_canvas.height = this.canvasLength * 2;
+        this.collapse_canvas.style.width = this.canvasLength + "px";
+        this.collapse_canvas.style.height = this.canvasLength + "px";
+        this.collapse_canvas.getContext('2d').scale(2, 2);
+
+    }
     // Make a 9x9 sqaure 
     // Every 3rd line is bold both vertically and horizontally
     drawCollapseGrid() {
         let lineThickness = this.b.lineThickness;
+        let collapse_ctx = this.collapse_ctx;
+        let boxLength = this.b.boxLength;
+        let canvasLength = this.b.canvasLength;
+
         // Vertixal lines
         for (let i = 1; i < 9; i++) {
             collapse_ctx.beginPath();
@@ -27,7 +49,7 @@ class Collapse {
             collapse_ctx.fill();
             collapse_ctx.closePath();
         }
-    
+
         // Horizontal lines
         for (let i = 1; i < 9; i++) {
             collapse_ctx.beginPath();
@@ -47,28 +69,30 @@ class Collapse {
         let collapseFont = this.collapseFont;
         let collapseBoardColor = this.collapseBoardColor;
         let collapseBoard = this.collapseBoard;
+        let collapse_ctx = this.collapse_ctx;
+        let boxLength = this.b.boxLength;
 
         let top_x = x * boxLength;
         let top_y = y * boxLength;
-    
+
         collapse_ctx.fillStyle = collapseBoardColor;
-    
+
         let boardValue = collapseBoard[y][x];
-    
+
         // Just draw character
         if (boardValue.length === 1 && boardValue[0] < 0) {
             // draws text with bottom left part of character stating at x,y
             if (boardValue[0] < 0) { boardValue[0] = -boardValue[0]; }
-    
+
             collapse_ctx.font = this.b.font;
             collapse_ctx.fillText(boardValue, (x + 0.4) * boxLength, (y + 0.7) * boxLength);
         }
-    
+
         // Need to draw superposition
         else {
             let mini_box_length = (1 / 3 * boxLength);
             let box_padding = boxLength / 10;
-    
+
             for (let i = 1; i < 3; i++) {
                 collapse_ctx.beginPath();
                 collapse_ctx.rect(top_x + i * mini_box_length, top_y + box_padding, 1, boxLength - box_padding * 2);
@@ -77,7 +101,7 @@ class Collapse {
                 collapse_ctx.fill();
                 collapse_ctx.closePath();
             }
-    
+
             // What a nightmare of positioning values.
             for (let i = 0; i < 3; i++) {
                 for (let j = 0; j < 3; j++) {
@@ -99,7 +123,7 @@ class Collapse {
     }
 
     clearCollapseBoard() {
-        collapse_ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.collapse_ctx.clearRect(0, 0, this.collapse_canvas.width, this.collapse_canvas.height);
     }
 
     drawCollapseBoard() {
@@ -113,7 +137,7 @@ class Collapse {
     syncBoards() {
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                let num = this.b.getValueOfCell(x,y);
+                let num = this.b.getValueOfCell(x, y);
                 if (num === this.b.blankNum) {
                     this.collapseBoard[y][x] = [...this.possible_values];
                 }
@@ -127,8 +151,8 @@ class Collapse {
                 }
             }
         }
-    
-    
+
+
         // Look through all cells in row x and column y
         for (let y = 0; y < 9; y++) {
             for (let x = 0; x < 9; x++) {
@@ -139,37 +163,37 @@ class Collapse {
                     for (let i = 0; i < 9; i++) {
                         if (i !== x) {
                             let index_positive = this.collapseBoard[y][i].indexOf(-num);
-    
+
                             if (index_positive > -1) {
                                 this.collapseBoard[y][i].splice(index_positive, 1);
                             }
                         }
                     }
-    
+
                     // 2: Remove value from all superpositions in column
                     for (let i = 0; i < 9; i++) {
                         if (i !== y) {
                             let index_negative = this.collapseBoard[i][x].indexOf(-num);
-    
+
                             if (index_negative > -1) {
                                 this.collapseBoard[i][x].splice(index_negative, 1);
                             }
                         }
                     }
-    
+
                     // 3: Remove value from all superpositions in mini box
                     let miniGridX = Math.floor(x / 3);
                     let miniGridY = Math.floor(y / 3);
-    
+
                     let startingX = miniGridX * 3;
                     let startingY = miniGridY * 3;
-    
+
                     // Check valid mini box
                     for (let j = startingX; j < startingX + 3; j++) {
                         for (let k = startingY; k < startingY + 3; k++) {
                             if (j !== x && k !== y) {
                                 let index_negative = this.collapseBoard[k][j].indexOf(-num);
-    
+
                                 if (index_negative > -1) {
                                     this.collapseBoard[k][j].splice(index_negative, 1);
                                 }
