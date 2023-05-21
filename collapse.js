@@ -77,7 +77,7 @@ class Collapse {
 
         collapse_ctx.fillStyle = collapseBoardColor;
 
-        let boardValue = collapseBoard[y][x];
+        let boardValue = collapseBoard[x][y];
 
         // Just draw character
         if (boardValue.length === 1 && boardValue[0] < 0) {
@@ -139,14 +139,14 @@ class Collapse {
             for (let y = 0; y < 9; y++) {
                 let num = this.b.getValueOfCell(x, y);
                 if (num === this.b.blankNum) {
-                    this.collapseBoard[y][x] = [...this.possible_values];
+                    this.collapseBoard[x][y] = [...this.possible_values];
                 }
                 else {
                     if (num > 0) {
-                        this.collapseBoard[y][x] = [-num];
+                        this.collapseBoard[x][y] = [-num];
                     }
                     else {
-                        this.collapseBoard[y][x] = [num];
+                        this.collapseBoard[x][y] = [num];
                     }
                 }
             }
@@ -156,16 +156,16 @@ class Collapse {
         // Look through all cells in row x and column y
         for (let y = 0; y < 9; y++) {
             for (let x = 0; x < 9; x++) {
-                if (this.collapseBoard[y][x].length === 1 && this.collapseBoard[y][x][0] < 0) {
+                if (this.collapseBoard[x][y].length === 1 && this.collapseBoard[x][y][0] < 0) {
                     // Once we find a definite value we need to:
-                    let num = this.collapseBoard[y][x][0];
+                    let num = this.collapseBoard[x][y][0];
                     // 1: Remove the value from all the superpositions in row
                     for (let i = 0; i < 9; i++) {
                         if (i !== x) {
-                            let index_positive = this.collapseBoard[y][i].indexOf(-num);
+                            let index_positive = this.collapseBoard[i][y].indexOf(-num);
 
                             if (index_positive > -1) {
-                                this.collapseBoard[y][i].splice(index_positive, 1);
+                                this.collapseBoard[i][y].splice(index_positive, 1);
                             }
                         }
                     }
@@ -173,10 +173,10 @@ class Collapse {
                     // 2: Remove value from all superpositions in column
                     for (let i = 0; i < 9; i++) {
                         if (i !== y) {
-                            let index_negative = this.collapseBoard[i][x].indexOf(-num);
+                            let index_negative = this.collapseBoard[x][i].indexOf(-num);
 
                             if (index_negative > -1) {
-                                this.collapseBoard[i][x].splice(index_negative, 1);
+                                this.collapseBoard[x][i].splice(index_negative, 1);
                             }
                         }
                     }
@@ -192,10 +192,10 @@ class Collapse {
                     for (let j = startingX; j < startingX + 3; j++) {
                         for (let k = startingY; k < startingY + 3; k++) {
                             if (j !== x && k !== y) {
-                                let index_negative = this.collapseBoard[k][j].indexOf(-num);
+                                let index_negative = this.collapseBoard[j][k].indexOf(-num);
 
                                 if (index_negative > -1) {
-                                    this.collapseBoard[k][j].splice(index_negative, 1);
+                                    this.collapseBoard[j][k].splice(index_negative, 1);
                                 }
                             }
                         }

@@ -40,23 +40,23 @@ class Board {
     initializeCanvasSize() {
         this.canvasLength = this.main.clientHeight;
         this.boxLength = this.canvasLength / 9;
-    
+
         // Need to double canvas size and then half it to make it not blurry
         canvas.width = this.canvasLength * 2;
         canvas.height = this.canvasLength * 2;
         canvas.style.width = this.canvasLength + "px";
         canvas.style.height = this.canvasLength + "px";
-        canvas.getContext('2d').scale(2,2);
+        canvas.getContext('2d').scale(2, 2);
     }
 
     // Make a 9x9 sqaure 
     // Every 3rd line is bold both vertically and horizontally
     drawGrid() {
-    let lineThickness = this.lineThickness;
-    let boardColor = this.boardColor;
-    let boxLength = this.boxLength;
-    let canvasLength = this.canvasLength;
-    let ctx = this.ctx;
+        let lineThickness = this.lineThickness;
+        let boardColor = this.boardColor;
+        let boxLength = this.boxLength;
+        let canvasLength = this.canvasLength;
+        let ctx = this.ctx;
         // Vertixal lines
         for (let i = 1; i < 9; i++) {
             ctx.beginPath();
@@ -105,8 +105,8 @@ class Board {
     drawAllNumbers() {
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                if (this.board[y][x] !== this.blankNum) {
-                    this.drawNumber(x, y, this.board[y][x]);
+                if (this.board[x][y] !== this.blankNum) {
+                    this.drawNumber(x, y, this.board[x][y]);
                 }
             }
         }
@@ -122,15 +122,15 @@ class Board {
     }
 
     // ======== GETTERS & SETTERS =======
-    getValueOfCell(x,y) {
-        return this.board[y][x];
+    getValueOfCell(x, y) {
+        return this.board[x][y];
     }
 
     // ======== START OF BOARD LOGIC =======
     resetBoard() {
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                this.board[y][x] = this.blankNum;
+                this.board[x][y] = this.blankNum;
             }
         }
     }
@@ -144,13 +144,13 @@ class Board {
         for (let x = 0; x < 9; x = x + 3) {
             for (let y = 0; y < 9; y = y + 3) {
                 // Put 2-4 numbers in each small 3x3 board
-                let numGivenNums = 2 + this.getRandomInt(3);
+                let numGivenNums = 2 + this.getRandomInt(2);
                 for (let i = 0; i < numGivenNums; i++) {
-                    let randY = this.getRandomInt(3) + y;
-                    let randX = this.getRandomInt(3) + x;
-                    let randNum = -1 * (1 + this.getRandomInt(9));
-                    if (this.board[randY][randX] === this.blankNum && this.checkValidNum(randX, randY, randNum)) {
-                        this.board[randY][randX] = randNum;
+                    let randY = this.getRandomInt(2) + y;
+                    let randX = this.getRandomInt(2) + x;
+                    let randNum = -1 * (1 + this.getRandomInt(8));
+                    if (this.board[randX][randY] === this.blankNum && this.checkValidNum(randX, randY, randNum)) {
+                        this.board[randX][randY] = randNum;
                     } else {
                         i--;
                     }
@@ -160,49 +160,13 @@ class Board {
     }
 
     // Generate a board with one possible solution
-    generateBoard() {
-        // This logic actually sucks lol. It just generates 3 values
-        // THERE is some existential issues with this function. Namely it will just keep collapsing the same number 
-        // Even when its reduced to one number because it is the lowest. Also I worry that it will keep trying to place
-        // values around other values but thats ok because we can just remove numbers randomly after that.
-        // Should place random numbers in board until either makes the board impossible or fills out board.
-        for (let i = 0; i < 3; i++) {
-            // Logic for random numbers:
-            // - Make list of cells with lowest number of possible values
-            let lowest_num_values = 9;
-            // Array with two ints representing the coordinates of each cell
-            let list_of_cells_to_collapse = [];
-
-            for (let x = 0; x < 9; x++) {
-                for (let y = 0; y < 9; y++) {
-                    // If cell has the same number of superpositions as the lowest add it to the array
-                    if (collapseBoard[y][x].length > 1) {
-                        if (collapseBoard[y][x].length === lowest_num_values) {
-                            list_of_cells_to_collapse.push([x, y]);
-                        }
-                        // If we find a cell with less values than the lowest number of values then reset the array and store current cell
-                        if (collapseBoard[y][x].length < lowest_num_values) {
-                            list_of_cells_to_collapse = [];
-                            list_of_cells_to_collapse.push([x, y]);
-                        }
-                    }
-                }
-            }
-            // - Randomly choose a cell from the list]
-            let randomListIndex = Math.floor(Math.random() * list_of_cells_to_collapse.length);
-            let randomListCoord = list_of_cells_to_collapse[randomListIndex];
-
-            // - Randomly collapse the cell into one of its possible values
-            let randomCellIndex = Math.floor(Math.random() * collapseBoard[randomListCoord[1]][randomListCoord[0]].length);
-            board[randomListCoord[0]][randomListCoord[1]] = -collapseBoard[randomListCoord[1]][randomListCoord[0]][randomCellIndex];
-
-
-
-
-            // If there is ever a cell with 0 possible values then restart process
-
-            syncBoards();
-        }
+    generateBoard(c) {
+        let rand_x = this.getRandomInt(8);
+        let rand_y = this.getRandomInt(8);
+        // Rules for picking a cell: 
+        //   - collapse_cell cannot be empty
+        //   - collapse_cell cannot hold a negative integer (collapsed)
+        c.syncBoards();
     }
 
     // This function will likely be obsoleted by wave fn logic
@@ -212,7 +176,7 @@ class Board {
 
         // Check valid row
         for (let j = 0; j < 9; j++) {
-            if (Math.abs(this.board[y][j]) === Math.abs(num)) {
+            if (Math.abs(this.board[j][y]) === Math.abs(num)) {
                 return false;
             }
         }
@@ -220,7 +184,7 @@ class Board {
 
         // Check valid Column
         for (let j = 0; j < 9; j++) {
-            if (Math.abs(this.board[j][x]) === Math.abs(num)) {
+            if (Math.abs(this.board[x][j]) === Math.abs(num)) {
                 return false;
             }
         }
@@ -235,7 +199,7 @@ class Board {
         // Check valid mini box
         for (let j = startingX; j < startingX + 3; j++) {
             for (let k = startingY; k < startingY + 3; k++) {
-                if (Math.abs(this.board[k][j]) === Math.abs(num)) {
+                if (Math.abs(this.board[j][k]) === Math.abs(num)) {
                     return false;
                 }
             }
@@ -285,10 +249,10 @@ class Board {
             const rect = canvas.getBoundingClientRect();
             let clickX = e.clientX - rect.left;
             let clickY = e.clientY - rect.top;
-    
+
             this.currentSquareX = this.getSquare(clickX);
             this.currentSquareY = this.getSquare(clickY);
-    
+
             this.deselectSquare();
             this.selectSquare();
         } else {
@@ -298,23 +262,23 @@ class Board {
 
     handleKeyEvent(e) {
         if (this.receiveInput == false) return;
-    
+
         // If key not 1-9 or SPACE then return
         if (!/^[1-9 ]$/i.test(e.key)) return;
-    
+
         // Check if trying to change starting num
-        if (this.board[this.currentSquareY][this.currentSquareX] < 0) return;
-    
+        if (this.board[this.currentSquareX][this.currentSquareY] < 0) return;
+
         let num = 0;
         if (e.key === " ") num = 0;
         else num = parseInt(e.key);
-    
+
         //if (!checkValidNum(currentSquareX, currentSquareY, num)) return;
-    
-        this.board[this.currentSquareY][this.currentSquareX] = num;
+
+        this.board[this.currentSquareX][this.currentSquareY] = num;
         this.selectSquare();
     }
 
     // ========== MISC FUNCTIONS ==========
-    getRandomInt(max) { return Math.floor(Math.random() * max); }
+    getRandomInt(max) { return Math.floor(Math.random() * (max + 1)); }
 }

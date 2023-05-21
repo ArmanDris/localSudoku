@@ -5,7 +5,7 @@ class Referee {
     }
 
     setup_board() {
-        //this.b.generateBoard();
+        this.b.generateBoard(this.c);
         this.c.drawCollapseBoard();
         this.b.drawBoard();
     }
@@ -20,9 +20,7 @@ class Referee {
     }
 
     handleKeyDown(e) {
-        if (e.key === ' ' && e.target == document.body);
-            e.preventDefault();
-
+        if (e.key === ' ' && e.target == document.body) {e.preventDefault();}
         this.b.handleKeyEvent(e);
         this.c.syncBoards();
         this.c.drawCollapseBoard();
