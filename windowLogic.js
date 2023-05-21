@@ -20,7 +20,7 @@ class Referee {
     }
 
     handleKeyDown(e) {
-        if (e.key === ' ' && e.target == document.body) {e.preventDefault();}
+        if (e.key === ' ' && e.target == document.body) { e.preventDefault(); }
         this.b.handleKeyEvent(e);
         this.c.syncBoards();
         this.c.drawCollapseBoard();
@@ -30,7 +30,7 @@ class Referee {
 let referee = new Referee;
 referee.setup_board();
 
-window.addEventListener('mousedown', e => {referee.handleMouseDown(e);});
-window.addEventListener('keydown', e => {referee.handleKeyDown(e);});
+window.addEventListener('mousedown', e => { referee.handleMouseDown(e); });
+window.addEventListener('keydown', e => { referee.handleKeyDown(e); });
 
-window.addEventListener('resize',() => referee.resize_board(), false);
+window.addEventListener('resize', () => referee.resize_board(), false);

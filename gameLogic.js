@@ -161,11 +161,24 @@ class Board {
 
     // Generate a board with one possible solution
     generateBoard(c) {
+        for (let i = 0; i < 1000; i++) {
+            this.collapseRandomValue(c);
+        }
+        console.log("looped");
+    }
+
+    collapseRandomValue(c) {
         let rand_x = this.getRandomInt(8);
         let rand_y = this.getRandomInt(8);
+        let valid_values = c.getValues(rand_x, rand_y);
+
         // Rules for picking a cell: 
         //   - collapse_cell cannot be empty
         //   - collapse_cell cannot hold a negative integer (collapsed)
+        if (valid_values.length !== 0 && valid_values[0] > 0) {
+            let random_valid_value = valid_values[this.getRandomInt(valid_values.length - 1)];
+            this.board[rand_x][rand_y] = -random_valid_value;
+        }
         c.syncBoards();
     }
 

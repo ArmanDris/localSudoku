@@ -14,7 +14,12 @@ class Collapse {
 
         // ======== BOARD LOGIC VARIABLES =======
         this.possible_values = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-        this.collapseBoard = Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => this.possible_values.slice()));
+        this.collapse_board = Array.from({ length: 9 }, () => Array.from({ length: 9 }, () => this.possible_values.slice()));
+    }
+
+    // ======== GETTERS/SETTERS =======
+    getValues(x, y) {
+        return this.collapse_board[x][y];
     }
 
     // ======== START OF DRAW FUNCTIONS =======
@@ -68,7 +73,7 @@ class Collapse {
     drawCollapseNumbers(x, y) {
         let collapseFont = this.collapseFont;
         let collapseBoardColor = this.collapseBoardColor;
-        let collapseBoard = this.collapseBoard;
+        let collapseBoard = this.collapse_board;
         let collapse_ctx = this.collapse_ctx;
         let boxLength = this.b.boxLength;
 
@@ -139,14 +144,14 @@ class Collapse {
             for (let y = 0; y < 9; y++) {
                 let num = this.b.getValueOfCell(x, y);
                 if (num === this.b.blankNum) {
-                    this.collapseBoard[x][y] = [...this.possible_values];
+                    this.collapse_board[x][y] = [...this.possible_values];
                 }
                 else {
                     if (num > 0) {
-                        this.collapseBoard[x][y] = [-num];
+                        this.collapse_board[x][y] = [-num];
                     }
                     else {
-                        this.collapseBoard[x][y] = [num];
+                        this.collapse_board[x][y] = [num];
                     }
                 }
             }
@@ -156,16 +161,16 @@ class Collapse {
         // Look through all cells in row x and column y
         for (let y = 0; y < 9; y++) {
             for (let x = 0; x < 9; x++) {
-                if (this.collapseBoard[x][y].length === 1 && this.collapseBoard[x][y][0] < 0) {
+                if (this.collapse_board[x][y].length === 1 && this.collapse_board[x][y][0] < 0) {
                     // Once we find a definite value we need to:
-                    let num = this.collapseBoard[x][y][0];
+                    let num = this.collapse_board[x][y][0];
                     // 1: Remove the value from all the superpositions in row
                     for (let i = 0; i < 9; i++) {
                         if (i !== x) {
-                            let index_positive = this.collapseBoard[i][y].indexOf(-num);
+                            let index_positive = this.collapse_board[i][y].indexOf(-num);
 
                             if (index_positive > -1) {
-                                this.collapseBoard[i][y].splice(index_positive, 1);
+                                this.collapse_board[i][y].splice(index_positive, 1);
                             }
                         }
                     }
@@ -173,10 +178,10 @@ class Collapse {
                     // 2: Remove value from all superpositions in column
                     for (let i = 0; i < 9; i++) {
                         if (i !== y) {
-                            let index_negative = this.collapseBoard[x][i].indexOf(-num);
+                            let index_negative = this.collapse_board[x][i].indexOf(-num);
 
                             if (index_negative > -1) {
-                                this.collapseBoard[x][i].splice(index_negative, 1);
+                                this.collapse_board[x][i].splice(index_negative, 1);
                             }
                         }
                     }
@@ -192,10 +197,10 @@ class Collapse {
                     for (let j = startingX; j < startingX + 3; j++) {
                         for (let k = startingY; k < startingY + 3; k++) {
                             if (j !== x && k !== y) {
-                                let index_negative = this.collapseBoard[j][k].indexOf(-num);
+                                let index_negative = this.collapse_board[j][k].indexOf(-num);
 
                                 if (index_negative > -1) {
-                                    this.collapseBoard[j][k].splice(index_negative, 1);
+                                    this.collapse_board[j][k].splice(index_negative, 1);
                                 }
                             }
                         }
@@ -203,5 +208,17 @@ class Collapse {
                 }
             }
         }
+    }
+
+    validSoFar() {
+        for (let x = 0; x < 8; x++) {
+            for (let y = 0; y < 8; y++) {
+                if (this.collapse_board[x][y].length === 0) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 }
