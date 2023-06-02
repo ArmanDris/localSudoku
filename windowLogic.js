@@ -6,6 +6,7 @@ class Referee {
 
     setup_board() {
         this.b.generateBoard(this.c);
+        this.c.syncBoards();
         this.c.drawCollapseBoard();
         this.b.drawBoard();
     }

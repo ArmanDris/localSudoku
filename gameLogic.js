@@ -159,28 +159,96 @@ class Board {
         }
     }
 
-    // Generate a board with one possible solution
-    generateBoard(c) {
-        for (let i = 0; i < 1000; i++) {
-            this.collapseRandomValue(c);
-        }
-        console.log("looped");
+    // From Chat
+    generateBoard() {
+        this.resetBoard();
+        const board = this.board;
+      
+        // Start filling the board
+        this.fillBoard(board);
+      
+        // Remove some numbers to create a puzzle
+        this.removeNumbers(board);
+      
+        this.board = board;
     }
 
-    collapseRandomValue(c) {
-        let rand_x = this.getRandomInt(8);
-        let rand_y = this.getRandomInt(8);
-        let valid_values = c.getValues(rand_x, rand_y);
-
-        // Rules for picking a cell: 
-        //   - collapse_cell cannot be empty
-        //   - collapse_cell cannot hold a negative integer (collapsed)
-        if (valid_values.length !== 0 && valid_values[0] > 0) {
-            let random_valid_value = valid_values[this.getRandomInt(valid_values.length - 1)];
-            this.board[rand_x][rand_y] = -random_valid_value;
+    // From Chat
+    fillBoard(board) {
+        const row = 0;
+        const col = 0;
+      
+        if (this.solveBoard(board, row, col)) {
+          return true;
         }
-        c.syncBoards();
+      
+        return false;
     }
+
+    // From Chat
+    solveBoard(board, row, col) {
+        if (row === 9) {
+          return true; // Reached the end of the board
+        }
+      
+        if (col === 9) {
+          return this.solveBoard(board, row + 1, 0); // Move to the next row
+        }
+      
+        if (board[row][col] !== 0) {
+          return this.solveBoard(board, row, col + 1); // Cell already filled, move to the next column
+        }
+      
+        for (let num = 1; num <= 9; num++) {
+          if (this.isValidMove(board, row, col, num)) {
+            board[row][col] = num;
+      
+            if (this.solveBoard(board, row, col + 1)) {
+              return true;
+            }
+      
+            board[row][col] = 0; // Backtrack
+          }
+        }
+      
+        return false;
+    }
+
+    // From Chat
+    isValidMove(board, row, col, num) {
+        for (let i = 0; i < 9; i++) {
+          if (board[row][i] === num || board[i][col] === num) {
+            return false; // Check for row and column conflicts
+          }
+        }
+      
+        const startRow = Math.floor(row / 3) * 3;
+        const startCol = Math.floor(col / 3) * 3;
+      
+        for (let i = startRow; i < startRow + 3; i++) {
+          for (let j = startCol; j < startCol + 3; j++) {
+            if (board[i][j] === num) {
+              return false; // Check for 3x3 grid conflicts
+            }
+          }
+        }
+      
+        return true;
+    }
+
+    // From Chat
+    removeNumbers(board) {
+        const numToRemove = 40; // Adjust this number to control difficulty
+      
+        for (let i = 0; i < numToRemove; i++) {
+          const row = this.getRandomInt(8);
+          const col = this.getRandomInt(8);
+      
+          board[row][col] = 0;
+        }
+    }
+    
+      
 
     // This function will likely be obsoleted by wave fn logic
     checkValidNum(x, y, num) {
