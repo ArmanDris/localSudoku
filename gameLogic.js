@@ -135,54 +135,24 @@ class Board {
         }
     }
 
-    // Place starting numbers in board
-    // Does not guarentee board will be valid
-    populateBoard() {
-        // Clear board to make sure populate board does not loop infinitely
-        this.resetBoard();
-
-        for (let x = 0; x < 9; x = x + 3) {
-            for (let y = 0; y < 9; y = y + 3) {
-                // Put 2-4 numbers in each small 3x3 board
-                let numGivenNums = 2 + this.getRandomInt(2);
-                for (let i = 0; i < numGivenNums; i++) {
-                    let randY = this.getRandomInt(2) + y;
-                    let randX = this.getRandomInt(2) + x;
-                    let randNum = -1 * (1 + this.getRandomInt(8));
-                    if (this.board[randX][randY] === this.blankNum && this.checkValidNum(randX, randY, randNum)) {
-                        this.board[randX][randY] = randNum;
-                    } else {
-                        i--;
-                    }
-                }
-            }
-        }
-    }
-
     // From Chat
     generateBoard() {
         this.resetBoard();
         const board = this.board;
       
         // Start filling the board
-        this.fillBoard(board);
+        this.solveBoard(board, 0, 0);
       
         // Remove some numbers to create a puzzle
         this.removeNumbers(board);
-      
-        this.board = board;
-    }
 
-    // From Chat
-    fillBoard(board) {
-        const row = 0;
-        const col = 0;
-      
-        if (this.solveBoard(board, row, col)) {
-          return true;
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
+                board[x][y] = -board[x][y];
+            }
         }
       
-        return false;
+        this.board = board;
     }
 
     // From Chat
@@ -247,8 +217,6 @@ class Board {
           board[row][col] = 0;
         }
     }
-    
-      
 
     // This function will likely be obsoleted by wave fn logic
     checkValidNum(x, y, num) {

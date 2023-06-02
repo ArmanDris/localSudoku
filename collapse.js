@@ -209,16 +209,4 @@ class Collapse {
             }
         }
     }
-
-    validSoFar() {
-        for (let x = 0; x < 8; x++) {
-            for (let y = 0; y < 8; y++) {
-                if (this.collapse_board[x][y].length === 0) {
-                    return false;
-                }
-            }
-        }
-        
-        return true;
-    }
 }
