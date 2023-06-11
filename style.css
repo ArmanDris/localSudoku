@@ -40,24 +40,36 @@ canvas {
     background: #27241D;
     border: 5px #C7A86B solid;
     opacity: 0.95;
+
     font-family: sans-serif;
+    color: #FAF9F7;
+    
+    font-weight: lighter;
 }
 
-.timer {
+#timer {
     text-align: center;
 
-    color: white;
     font-size: 60px;
     letter-spacing: 0.1em;
-    margin-top: 15%;
+    margin-top: 25%;
 }
 
-.grats-text {
+#grats-text {
     text-align: center;
+    width: 40vh;
 
-    color: #C7A86B;
+    color: #FAF9F7;
     font-size: 24px;
-    margin-top: 15%;
+    margin: 5% auto;
+}
+
+#restart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20%;
+    cursor: pointer;
 }
 
 footer {

@@ -15,6 +15,8 @@ class Board {
         this.font = "300 28px Sans-serif";
         this.boldFont = "300 28px Sans-serif";
 
+        this.win_screen = document.getElementById('win');
+
         // ======== BOARD LOGIC VARIABLES =======
         this.blankNum = 0;
         // Board gets populated with negative numbers at start of game, negative numbers cannot be changed :O.
@@ -29,6 +31,10 @@ class Board {
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
+
+        this.seconds = 0;
+
+        this.timer = setInterval(() => {this.seconds++}, 1000);
 
         // ======== INPUT HANDLING VARIABLES =======
         this.receiveInput = false;
@@ -273,8 +279,31 @@ class Board {
         // Lock board
 
         // Display win window
-        let win_screen = document.getElementById('win');
-        win_screen.style.display = 'initial';
+        let win_messages = [
+            "Bravo, my brilliant puzzle solver!",
+            "Excellent work, my Sudoku superstar!",
+            "Impressive skills, you've got that Sudoku magic!",
+            "You did it, my clever friend! So proud of you!",
+            "Fantastic job, well played, my Sudoku ace!",
+            "Outstanding performance, my dear genius!",
+            "Well done, my incredible puzzle master!",
+            "You're awesome, congratulations, my brilliant mind!",
+            "Bravo, my talented Sudoku champion!",
+            "Terrific achievement, hats off to you, my puzzle prodigy!",
+            "Incredible work, you're a Sudoku genius, my exceptional player!",
+            "Marvelous job, I'm beyond proud of you, my puzzle virtuoso!",
+            "Phenomenal play, you've mastered it, my unstoppable solver!",
+            "Congrats, you're a Sudoku superstar, my unbeatable challenger!",
+            "Exceptional performance, way to go, my incredible mind-bender!"
+        ]
+
+        let timer = document.getElementById('timer');
+        timer.textContent = this.formatTime();
+
+        let grats = document.getElementById('grats-text');
+        grats.textContent = win_messages[this.getRandomInt(win_messages.length - 1)];
+
+        this.win_screen.style.display = 'initial';
     }
 
     // ======== START OF INPUT HANDLING =======
@@ -330,6 +359,8 @@ class Board {
     }
 
     handleKeyEvent(e) {
+        if (this.win_screen.style.display !== 'none') return;
+
         if (this.receiveInput == false) return;
 
         // If key not 1-9 or SPACE then return
@@ -350,4 +381,14 @@ class Board {
 
     // ========== MISC FUNCTIONS ==========
     getRandomInt(max) { return Math.floor(Math.random() * (max + 1)); }
+
+    formatTime() {
+        let m = Math.floor(this.seconds/60);
+        let s = this.seconds % 60;
+
+        if (m < 10) { m = ('0' + m); }
+        if (s < 10) { s = ('0' + s); }
+
+        return (m + ":" + s);
+    }
 }
