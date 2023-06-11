@@ -33,43 +33,45 @@ canvas {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
     /* Canvas height is 80% of vh */
-    width: 60vh;
-    height: 60vh;
+    width: 44vh;
+    height: 44vh;
+    padding: 4%;
     border-radius: 15%;
+
     background: #27241D;
     border: 5px #C7A86B solid;
-    opacity: 0.95;
-
     font-family: sans-serif;
     color: #FAF9F7;
-    
-    font-weight: lighter;
+    text-align: center;
 }
 
 #timer {
-    text-align: center;
-
-    font-size: 60px;
-    letter-spacing: 0.1em;
-    margin-top: 25%;
+    margin-top: 15%;
+    font-size: 70px;
+    color: #C7A86B;
 }
 
 #grats-text {
-    text-align: center;
-    width: 40vh;
-
+    margin-top: 5%;
     color: #FAF9F7;
-    font-size: 24px;
-    margin: 5% auto;
+    font-size: 20px;
 }
 
 #restart {
+    position: absolute;
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 20%;
     cursor: pointer;
+
+    font-weight: lighter;
+    font-size: 18px;
 }
 
 footer {

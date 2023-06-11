@@ -214,7 +214,7 @@ class Board {
 
     // From Chat
     removeNumbers(board) {
-        const numToRemove = 50; // Adjust this number to control difficulty (default 40)
+        const numToRemove = 1; // Adjust this number to control difficulty (default 40)
       
         for (let i = 0; i < numToRemove; i++) {
           const row = this.getRandomInt(8);
