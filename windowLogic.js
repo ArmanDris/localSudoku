@@ -24,7 +24,6 @@ class Referee {
         if (e.key === ' ' && e.target == document.body) { e.preventDefault(); }
         this.b.handleKeyEvent(e);
         this.c.syncBoards();
-        this.c.drawCollapseBoard();
     }
 }
 

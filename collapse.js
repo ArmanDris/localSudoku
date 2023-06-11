@@ -208,5 +208,7 @@ class Collapse {
                 }
             }
         }
+
+        this.drawCollapseBoard();
     }
 }
