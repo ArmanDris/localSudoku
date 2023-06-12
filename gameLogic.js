@@ -36,6 +36,8 @@ class Board {
 
         this.timer = setInterval(() => {this.seconds++}, 1000);
 
+        this.leaderboard = [];
+
         // ======== INPUT HANDLING VARIABLES =======
         this.receiveInput = false;
         this.currentSquareX = -1;
@@ -276,9 +278,10 @@ class Board {
     }
 
     win() {
-        // Lock board
+        let b = new deliveryBoy();
 
-        // Display win window
+        this.leaderboard = b.deliverAndReceive("John", this.seconds);
+
         let win_messages = [
             "Bravo, my brilliant puzzle solver!",
             "Excellent work, my Sudoku superstar!",
