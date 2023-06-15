@@ -33,8 +33,7 @@ class Board {
         ];
 
         this.seconds = 0;
-
-        this.timer = setInterval(() => {this.seconds++}, 1000);
+        this.timer = setInterval(() => {this.seconds++;}, 1000);
 
         this.leaderboard = [];
 
@@ -278,9 +277,8 @@ class Board {
     }
 
     win() {
-        let b = new deliveryBoy();
-
-        this.leaderboard = b.deliverAndReceive("John", this.seconds);
+        let win_time = this.seconds;
+        this.updateLeaderboard("John", win_time);
 
         let win_messages = [
             "Bravo, my brilliant puzzle solver!",
@@ -301,12 +299,30 @@ class Board {
         ]
 
         let timer = document.getElementById('timer');
-        timer.textContent = this.formatTime();
+        timer.textContent = this.formatTime(win_time);
 
         let grats = document.getElementById('grats-text');
         grats.textContent = win_messages[this.getRandomInt(win_messages.length - 1)];
 
         this.win_screen.style.display = 'initial';
+    }
+
+    async updateLeaderboard(name, time) {
+        let b = new deliveryBoy();
+        this.leaderboard = await b.deliverAndReceive(name, time);
+
+        let table = "<table>";
+        for (let i = 0; i < this.leaderboard.length; i++) {
+            let name = this.leaderboard[i][0];
+            let time = this.leaderboard[i][1];
+            table +=  "<tr> <td>" + name + "</td>" + "<td>" + this.formatTime(time) + "</td> </tr>";
+        }
+        table += "</table>";
+
+        document.querySelector("#leaderboard table").innerHTML = table;
+
+        console.log(this.leaderboard);
+        
     }
 
     // ======== START OF INPUT HANDLING =======
@@ -385,9 +401,9 @@ class Board {
     // ========== MISC FUNCTIONS ==========
     getRandomInt(max) { return Math.floor(Math.random() * (max + 1)); }
 
-    formatTime() {
-        let m = Math.floor(this.seconds/60);
-        let s = this.seconds % 60;
+    formatTime(seconds) {
+        let m = Math.floor(seconds/60);
+        let s = seconds % 60;
 
         if (m < 10) { m = ('0' + m); }
         if (s < 10) { s = ('0' + s); }

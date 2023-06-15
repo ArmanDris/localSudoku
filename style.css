@@ -5,10 +5,20 @@
 
 body {
     background: #27241D;
+    color: #FAF9F7;
+    font-family: sans-serif;
+    font-weight: lighter;
 }
 
 header {
     height: 10vh;
+    display: grid;
+    place-items: center;
+
+    text-align: center;
+    color: #C7A86B;
+    font-weight: normal;
+    font-size: 24px;
 }
 
 main {
@@ -42,8 +52,6 @@ canvas {
 
     background: #27241D;
     border: 5px #C7A86B solid;
-    font-family: sans-serif;
-    color: #FAF9F7;
     text-align: center;
 }
 
@@ -55,7 +63,6 @@ canvas {
 
 #grats-text {
     margin-top: 5%;
-    color: #FAF9F7;
     font-size: 20px;
 }
 
@@ -73,6 +80,32 @@ canvas {
     font-weight: lighter;
     font-size: 18px;
 }
+
+#leaderboard {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translate(-0%, -50%);
+
+    height: 50vh;
+    width: 30vh;
+}
+
+#leaderboard table {
+    height: 100%;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    text-align: center;
+  }
+  
+  #leaderboard tr {
+    height: calc(100% / 5); /* Divide the height equally among 5 rows */
+  }
+
+  #leaderboard tr:nth-child(even) {
+    color: #C7A86B;
+  }
 
 footer {
     height: 10vh;

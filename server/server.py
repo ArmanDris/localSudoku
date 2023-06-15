@@ -4,19 +4,33 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-scores = []
+leaderboard = []
 
-@app.route('/scores', methods=['POST'])
+def placeOnLeaderboard(s, n):
+    global leaderboard
+    for i in leaderboard:
+        if (s <= i[1]):
+            #want to insert s before i
+            leaderboard.insert(leaderboard.index(i), [n, s])
+            leaderboard = leaderboard[0:5]
+            return
+    
+    if (len(leaderboard) < 5):
+        leaderboard.append([n, s])
+        
+        
+
+@app.route('/leaderboard', methods=['POST'])
 def handle_scores():
     score_data = request.get_json()
     name = score_data['name']
     score = score_data['score']
-    scores.append([name, score])
     print(name + " got " + str(score))
 
+    placeOnLeaderboard(score, name)
+
     response_data = {
-        'message': 'Score received',
-        'leaderboard': [100, 200, 300, 400, 500]
+        'leaderboard': leaderboard
     }
     return jsonify(response_data)
 

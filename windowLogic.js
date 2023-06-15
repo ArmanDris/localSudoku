@@ -1,16 +1,15 @@
 class Referee {
     constructor() {
+        this.seconds = 0;
         this.b = new Board();
-        this.c = new Collapse(this.b);
     }
 
     setup_board() {
         let win = document.getElementById('win');
         win.style.display = 'none';
         this.b.generateBoard(this.c);
-        this.c.syncBoards();
-        this.c.drawCollapseBoard();
         this.b.drawBoard();
+        setInterval(this.tick.bind(this), 1000);
     }
 
     resize_board() {
@@ -18,6 +17,13 @@ class Referee {
         this.b.drawBoard();
     }
 
+    tick() {
+        this.seconds++;
+
+        let header = document.getElementById('header');
+        header.textContent = 'Sudoku ' + this.b.formatTime(this.seconds);
+    }
+ 
     handleMouseDown(e) {
         this.b.handleMouseEvent(e);
     }
@@ -25,7 +31,6 @@ class Referee {
     handleKeyDown(e) {
         if (e.key === ' ' && e.target == document.body) { e.preventDefault(); }
         this.b.handleKeyEvent(e);
-        this.c.syncBoards();
     }
 }
 
