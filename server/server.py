@@ -6,7 +6,7 @@ CORS(app)
 
 leaderboard = []
 
-def placeOnLeaderboard(s, n):
+def placeOnLeaderboard(n, s):
     global leaderboard
     for i in leaderboard:
         if (s <= i[1]):
@@ -20,19 +20,27 @@ def placeOnLeaderboard(s, n):
         
         
 
+@app.route('/mailbox', methods=['POST'])
+def handle_mail():
+    try:
+        name = request.json['name']
+        score = request.json['score']
+
+        if not name or not score:
+            return jsonify({'error': 'Missing JSON data'}), 400
+        
+        print(name + " got " + str(score))
+        placeOnLeaderboard(name, score)
+
+        return jsonify({'message': 'Received.'}), 200
+    
+    except Exception as e:
+        print('An error occured %s', str(e))
+        return jsonify({'error': 'Internal Server Error'}), 500
+    
 @app.route('/leaderboard', methods=['POST'])
-def handle_scores():
-    score_data = request.get_json()
-    name = score_data['name']
-    score = score_data['score']
-    print(name + " got " + str(score))
-
-    placeOnLeaderboard(score, name)
-
-    response_data = {
-        'leaderboard': leaderboard
-    }
-    return jsonify(response_data)
+def send_leaderboard():
+    return jsonify({'leaderboard': leaderboard}), 200
 
 if __name__ == '__main__':
     app.run();

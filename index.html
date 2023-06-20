@@ -12,23 +12,39 @@
 </head>
 
 <body>
-    <header id="header">Sudoku 00:00</header>
+    <header id="header">
+        <div class="header-content">
+            <div class="header-content-box">
+                <p>Sudoku</p>
+            </div>
+            <div class="header-content-box">
+                <p id="timer">00:00</p>
+            </div>
+            <div class="header-content-box">
+                <img id="restart" src="refresh.png" width="40px" onclick="restartGame()">
+            </div>
+        </div>
+    </header>
     <main id="main">
+        <div id="left-panel"></div>
         <canvas id="canvas"></canvas>
         <div id="win">
-            <p id="timer">00:00</p>
+            <p id="end_timer">00:00</p>
             <p id="grats-text">Bravo, my talented Sudoku champion!</p>
-            <span id="restart" onclick="restartGame()">
-                <img src="refresh.png" width="48px">
-                <p>Wipe the board</p>
-            </span>
+            <div id="name_input">
+                <input id='nickname' name='name' placeholder='Nickname' min="3" max="10" />
+                <input id='submit' type="submit" value=" > " onclick="sendScore()" />
+            </div>
         </div>
-        <div id="leaderboard">
-            <table>
-            </table>
+        <div id="right-panel">
+            <div id="leaderboard">
+                <table>
+                </table>
+            </div>
         </div>
     </main>
-    <footer></footer>
+    <footer>
+    </footer>
     <div id="collapse_elements">
         <div id="collapse_header"></div>
         <div id="collapse_container">

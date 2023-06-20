@@ -1,32 +1,48 @@
-class deliveryBoy {
+class DeliveryBoy {
 
-    deliverAndReceive(name, score) {
-        let url = 'http://127.0.0.1:5000/leaderboard';
-        const data = { name: name, score: score };
-        let scores = [];
-
-        const fetchPromise = fetch(url, 
-        {
+    deliver(name, score) {
+        fetch('http://127.0.0.1:5000/mailbox', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({ name: name, score: score })
         })
-        .then(response => response.json())
-        .then(data => {
-            return data.leaderboard;
-        })
-        .catch(error => {
-            console.error(error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    console.log('Score sent successfully');
+                    return true;
+                }
+                else {
+                    console.error('Failed to send score, Error:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('Error', error)
+            })
+    }
 
-        const timeoutPromise = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                reject(new Error('Request timed out'));
-            }, 1000); // Adjust the timeout duration (in milliseconds) as needed
-        });
-    
-        return Promise.race([fetchPromise, timeoutPromise]);
+    async receive() {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/leaderboard', {
+              method: 'POST',
+              headers: {
+                'Content-type': 'application/json'
+              }
+            });
+        
+            if (response.ok) {
+              const data = await response.json();
+              console.log(data.leaderboard);
+              return data.leaderboard;
+            } 
+            else {
+              throw new Error(response.status);
+            }
+          } 
+          catch (error) {
+            console.log(error);
+            throw error;
+          }
     }
 }

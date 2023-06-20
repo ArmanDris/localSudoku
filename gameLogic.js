@@ -15,8 +15,6 @@ class Board {
         this.font = "300 28px Sans-serif";
         this.boldFont = "300 28px Sans-serif";
 
-        this.win_screen = document.getElementById('win');
-
         // ======== BOARD LOGIC VARIABLES =======
         this.blankNum = 0;
         // Board gets populated with negative numbers at start of game, negative numbers cannot be changed :O.
@@ -31,11 +29,6 @@ class Board {
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0]
         ];
-
-        this.seconds = 0;
-        this.timer = setInterval(() => {this.seconds++;}, 1000);
-
-        this.leaderboard = [];
 
         // ======== INPUT HANDLING VARIABLES =======
         this.receiveInput = false;
@@ -146,10 +139,10 @@ class Board {
     generateBoard() {
         this.resetBoard();
         const board = this.board;
-      
+
         // Start filling the board
         this.solveBoard(board, 0, 0);
-      
+
         // Remove some numbers to create a puzzle
         this.removeNumbers(board);
 
@@ -158,70 +151,72 @@ class Board {
                 board[x][y] = -board[x][y];
             }
         }
-      
+
         this.board = board;
     }
 
     // From Chat
     solveBoard(board, row, col) {
         if (row === 9) {
-          return true; // Reached the end of the board
+            return true; // Reached the end of the board
         }
-      
+
         if (col === 9) {
-          return this.solveBoard(board, row + 1, 0); // Move to the next row
+            return this.solveBoard(board, row + 1, 0); // Move to the next row
         }
-      
+
         if (board[row][col] !== 0) {
-          return this.solveBoard(board, row, col + 1); // Cell already filled, move to the next column
+            return this.solveBoard(board, row, col + 1); // Cell already filled, move to the next column
         }
-      
-        for (let num = 1; num <= 9; num++) {
-          if (this.isValidMove(board, row, col, num)) {
-            board[row][col] = num;
-      
-            if (this.solveBoard(board, row, col + 1)) {
-              return true;
+
+        let nums = this.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        for (let i = 0; i < 9; i++) {
+            let num = nums[i];
+            if (this.isValidMove(board, row, col, num)) {
+                board[row][col] = num;
+
+                if (this.solveBoard(board, row, col + 1)) {
+                    return true;
+                }
+
+                board[row][col] = 0; // Backtrack
             }
-      
-            board[row][col] = 0; // Backtrack
-          }
         }
-      
+
         return false;
     }
 
     // From Chat
     isValidMove(board, row, col, num) {
         for (let i = 0; i < 9; i++) {
-          if (board[row][i] === num || board[i][col] === num) {
-            return false; // Check for row and column conflicts
-          }
+            if (board[row][i] === num || board[i][col] === num) {
+                return false; // Check for row and column conflicts
+            }
         }
-      
+
         const startRow = Math.floor(row / 3) * 3;
         const startCol = Math.floor(col / 3) * 3;
-      
+
         for (let i = startRow; i < startRow + 3; i++) {
-          for (let j = startCol; j < startCol + 3; j++) {
-            if (board[i][j] === num) {
-              return false; // Check for 3x3 grid conflicts
+            for (let j = startCol; j < startCol + 3; j++) {
+                if (board[i][j] === num) {
+                    return false; // Check for 3x3 grid conflicts
+                }
             }
-          }
         }
-      
+
         return true;
     }
 
     // From Chat
     removeNumbers(board) {
         const numToRemove = 1; // Adjust this number to control difficulty (default 40)
-      
+
         for (let i = 0; i < numToRemove; i++) {
-          const row = this.getRandomInt(8);
-          const col = this.getRandomInt(8);
-      
-          board[row][col] = 0;
+            const row = this.getRandomInt(8);
+            const col = this.getRandomInt(8);
+
+            board[row][col] = 0;
         }
     }
 
@@ -230,7 +225,7 @@ class Board {
         // Num must be only one of its kind on its row, column and mini box
         let num = this.board[x][y];
 
-        if (num === 0) return false;
+        if (num === this.blankNum) return false;
 
         // Check valid row
         for (let j = 0; j < 9; j++) {
@@ -262,67 +257,6 @@ class Board {
         }
 
         return true;
-    }
-
-    checkSolved() {
-        for (let x = 0; x < 8; x++) {
-            for (let y = 0; y < 8; y++) {
-                if (this.validNum(x, y) === false) {
-                    return;
-                }
-            }
-        }
-
-        this.win();
-    }
-
-    win() {
-        let win_time = this.seconds;
-        this.updateLeaderboard("John", win_time);
-
-        let win_messages = [
-            "Bravo, my brilliant puzzle solver!",
-            "Excellent work, my Sudoku superstar!",
-            "Impressive skills, you've got that Sudoku magic!",
-            "You did it, my clever friend! So proud of you!",
-            "Fantastic job, well played, my Sudoku ace!",
-            "Outstanding performance, my dear genius!",
-            "Well done, my incredible puzzle master!",
-            "You're awesome, congratulations, my brilliant mind!",
-            "Bravo, my talented Sudoku champion!",
-            "Terrific achievement, hats off to you, my puzzle prodigy!",
-            "Incredible work, you're a Sudoku genius, my exceptional player!",
-            "Marvelous job, I'm beyond proud of you, my puzzle virtuoso!",
-            "Phenomenal play, you've mastered it, my unstoppable solver!",
-            "Congrats, you're a Sudoku superstar, my unbeatable challenger!",
-            "Exceptional performance, way to go, my incredible mind-bender!"
-        ]
-
-        let timer = document.getElementById('timer');
-        timer.textContent = this.formatTime(win_time);
-
-        let grats = document.getElementById('grats-text');
-        grats.textContent = win_messages[this.getRandomInt(win_messages.length - 1)];
-
-        this.win_screen.style.display = 'initial';
-    }
-
-    async updateLeaderboard(name, time) {
-        let b = new deliveryBoy();
-        this.leaderboard = await b.deliverAndReceive(name, time);
-
-        let table = "<table>";
-        for (let i = 0; i < this.leaderboard.length; i++) {
-            let name = this.leaderboard[i][0];
-            let time = this.leaderboard[i][1];
-            table +=  "<tr> <td>" + name + "</td>" + "<td>" + this.formatTime(time) + "</td> </tr>";
-        }
-        table += "</table>";
-
-        document.querySelector("#leaderboard table").innerHTML = table;
-
-        console.log(this.leaderboard);
-        
     }
 
     // ======== START OF INPUT HANDLING =======
@@ -378,8 +312,6 @@ class Board {
     }
 
     handleKeyEvent(e) {
-        if (this.win_screen.style.display !== 'none') return;
-
         if (this.receiveInput == false) return;
 
         // If key not 1-9 or SPACE then return
@@ -394,20 +326,19 @@ class Board {
 
         this.board[this.currentSquareX][this.currentSquareY] = num;
         this.selectSquare();
-
-        this.checkSolved();
     }
 
     // ========== MISC FUNCTIONS ==========
     getRandomInt(max) { return Math.floor(Math.random() * (max + 1)); }
 
-    formatTime(seconds) {
-        let m = Math.floor(seconds/60);
-        let s = seconds % 60;
+    shuffle(arr) {
+        let temp = [];
 
-        if (m < 10) { m = ('0' + m); }
-        if (s < 10) { s = ('0' + s); }
-
-        return (m + ":" + s);
+        for (let i = arr.length; i > 0; i--) {
+            let random_index = this.getRandomInt(i - 1);
+            temp.push(arr[random_index]);
+            arr.splice(random_index, 1);
+        }
+        return temp;
     }
 }

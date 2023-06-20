@@ -12,17 +12,37 @@ body {
 
 header {
     height: 10vh;
-    display: grid;
-    place-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    text-align: center;
-    color: #C7A86B;
-    font-weight: normal;
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    width: 80vh;
+    color:#C7A86B;
+}
+
+.header-content-box {
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#timer {
+    font-weight: bold;
     font-size: 24px;
 }
 
 main {
     height: 80vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 canvas {
@@ -30,7 +50,7 @@ canvas {
     padding: 0;
     margin: auto;
     display: block;
-    
+
     top: 0;
     bottom: 0;
     left: 0;
@@ -55,7 +75,7 @@ canvas {
     text-align: center;
 }
 
-#timer {
+#end_timer {
     margin-top: 15%;
     font-size: 70px;
     color: #C7A86B;
@@ -66,19 +86,28 @@ canvas {
     font-size: 20px;
 }
 
-#restart {
-    position: absolute;
-    bottom: 8%;
-    left: 50%;
-    transform: translateX(-50%);
-
+#name_input {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
 
-    font-weight: lighter;
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#name_input input {
     font-size: 18px;
+    padding: 4%;
+    margin: 2%;
+    color:#FAF9F7;
+    background: #27241D;
+    border: 1px#A39E93 solid;
+}
+
+#submit {
+    cursor: pointer;
 }
 
 #leaderboard {
@@ -97,15 +126,25 @@ canvas {
     table-layout: fixed;
     border-collapse: collapse;
     text-align: center;
-  }
-  
-  #leaderboard tr {
-    height: calc(100% / 5); /* Divide the height equally among 5 rows */
-  }
+}
 
-  #leaderboard tr:nth-child(even) {
+#leaderboard tr {
+    height: calc(100% / 5);
+    /* Divide the height equally among 5 rows */
+}
+
+#leaderboard tr:nth-child(even) {
     color: #C7A86B;
-  }
+}
+
+#restart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: #A39E93;
+}
 
 footer {
     height: 10vh;
@@ -113,7 +152,8 @@ footer {
 
 #collapse_elements {
     background: #A39E93;
-    display: none; /*Set display to 'none' to disable collapse board*/
+    display: none;
+    /*Set display to 'none' to disable collapse board*/
     position: absolute;
     top: 0;
     left: 75%;
