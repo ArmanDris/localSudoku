@@ -1,8 +1,13 @@
 class DeliveryBoy {
 
     deliver(name, score) {
-        fetch('http://127.0.0.1:5000/mailbox', {
+        const cacheBuster = Math.random(); // Generate a random value for cache busting
+        const url = `http://127.0.0.1:5000/mailbox?cacheBuster=${cacheBuster}`;
+
+        fetch(url, {
             method: 'POST',
+            mode: 'cors',
+            cache: 'no-store',
             headers: {
                 'Content-type': 'application/json'
             },
@@ -24,8 +29,13 @@ class DeliveryBoy {
 
     async receive() {
         try {
-            const response = await fetch('http://127.0.0.1:5000/leaderboard', {
+            const cacheBuster = Math.random(); // Generate a random value for cache busting
+            const url = `http://127.0.0.1:5000/leaderboard?cacheBuster=${cacheBuster}`;
+
+            const response = await fetch(url, {
               method: 'POST',
+              mode: 'cors',
+              cache: 'no-store',
               headers: {
                 'Content-type': 'application/json'
               }
