@@ -38,6 +38,15 @@ header {
     font-size: 24px;
 }
 
+#restart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: #A39E93;
+}
+
 main {
     height: 80vh;
     display: flex;
@@ -57,8 +66,7 @@ canvas {
     right: 0;
 }
 
-#win {
-    display: none;
+.prompt {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -86,24 +94,70 @@ canvas {
     font-size: 20px;
 }
 
+.center-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#play-again {
+    margin: 10% 0;
+    padding: 5%;
+    color: #FAF9F7;
+    border: 1px #FAF9F7 solid;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#play-again:hover {
+    border: 1px #C7A86B solid;
+    color: #C7A86B;
+}
+
+#welcome p {
+    margin: 5% 0 15% 0;
+}
+
+#difficulty {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 20%;
+    margin: 5% 0;
+}
+
+.box {
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    border: 1px #A39E93 solid;
+    border-radius: 15px;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+/*Note that the Referee class looks for this property so changing .actives name will break code*/
+.box.active {
+    border: 2px #C7A86B solid;
+    color: #C7A86B;
+}
+
 #name_input {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    position: absolute;
-    bottom: 20%;
-    left: 50%;
-    transform: translateX(-50%);
+    height: 20%;
+    margin: 5% 0;
 }
 
 #name_input input {
-    font-size: 18px;
-    padding: 4%;
-    margin: 2%;
+    padding: 10px 20px;
+    margin: 5px;
     color:#FAF9F7;
     background: #27241D;
     border: 1px#A39E93 solid;
+    border-radius: 10px;
 }
 
 #submit {
@@ -135,15 +189,6 @@ canvas {
 
 #leaderboard tr:nth-child(even) {
     color: #C7A86B;
-}
-
-#restart {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 18px;
-    color: #A39E93;
 }
 
 footer {

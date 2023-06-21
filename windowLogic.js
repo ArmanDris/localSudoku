@@ -1,16 +1,34 @@
 class Referee {
     constructor() {
+        this.name;
         this.seconds = 0;
-        this.b = new Board();
         this.intervalId;
-        this.win_screen = document.getElementById('win');
+
+        this.b = new Board();
         this.d = new DeliveryBoy();
+
+        this.win = document.getElementById('win');
+        this.welcome = document.getElementById('welcome');
+        this.timer = document.getElementById('timer');
+
+        this.b.clearBoard();
+        this.b.drawBoard();
+
+        this.win.style.display = 'none';
+        this.welcome.style.display = 'block';
+    }
+
+    pre_game_setup() {
+        let name = this.name = document.getElementById('nickname').value;
+        if (name.length === 0) { name = 'anon'; }
+        this.name = name;
+        this.setup_board(this.getDifficulty());
+
+        this.welcome.style.display = 'none';
     }
 
     setup_board() {
-        let win = document.getElementById('win');
-        win.style.display = 'none';
-        this.b.generateBoard(this.c);
+        this.b.generateBoard(difficulty);
         this.b.drawBoard();
         this.intervalId = setInterval(this.tick.bind(this), 1000);
         this.syncLeaderboard();
@@ -24,17 +42,12 @@ class Referee {
     // ========== TIMER FUNCTIONS ==========
     tick() {
         this.seconds++;
-        this.updateHeader();
+        this.timer.textContent = this.formatTime(this.seconds);
     }
 
     stopTimer() {
         clearInterval(this.intervalId);
-        this.updateHeader();
-    }
-
-    updateHeader() {
-        let header = document.getElementById('timer');
-        header.textContent = this.formatTime(this.seconds);
+        this.timer.textContent = this.formatTime(this.seconds);
     }
 
     // ========== WIN LOGIC ==========
@@ -47,11 +60,13 @@ class Referee {
             }
         }
 
-        this.win();
+        this.trigger_victory();
     }
 
-    win() {
+    trigger_victory() {
         this.stopTimer(this.intervalId);
+        this.d.deliver(this.name, this.seconds);
+        this.syncLeaderboard();
 
         let win_messages = [
             "Bravo, my brilliant puzzle solver!",
@@ -77,7 +92,7 @@ class Referee {
         let grats = document.getElementById('grats-text');
         grats.textContent = win_messages[this.b.getRandomInt(win_messages.length - 1)];
 
-        this.win_screen.style.display = 'initial';
+        this.win.style.display = 'initial';
     }
 
     async syncLeaderboard() {
@@ -105,7 +120,7 @@ class Referee {
 
     handleKeyDown(e) {
         if (e.key === ' ' && e.target == document.body) { e.preventDefault(); }
-        if (this.win_screen.style.display !== 'none') return;
+        if (this.win.style.display !== 'none' || this.welcome.style.display !== 'none') { return; }
         this.b.handleKeyEvent(e);
         this.checkSolved();
     }
@@ -120,24 +135,47 @@ class Referee {
 
         return (m + ":" + s);
     }
+
+    getDifficulty() {
+        let easy = document.getElementById('easy');
+        let medium = document.getElementById('medium');
+        let hard = document.getElementById('hard');
+
+        if (easy.classList.contains('active')) {
+            return 'easy';
+        }
+        if (hard.classList.contains('active')) {
+            return 'hard';
+        }
+
+        return 'medium';
+    }
 }
 
 let referee = new Referee;
-referee.setup_board();
 
 window.addEventListener('mousedown', e => { referee.handleMouseDown(e); });
 window.addEventListener('keydown', e => { referee.handleKeyDown(e); });
 
 window.addEventListener('resize', () => referee.resize_board(), false);
 
+// Difficulty button logic
+const boxes = document.querySelectorAll('.box');
+boxes.forEach(box => {
+    box.addEventListener('click', () => {
+        // Remove active class from all boxes
+        boxes.forEach(box => box.classList.remove('active'));
+
+        // Add active class to the clicked box
+        box.classList.add('active');
+    });
+});
+
+function attempt_kickoff() {
+    referee.pre_game_setup();
+}
+
 function restartGame() {
     referee.stopTimer();
     referee = new Referee;
-    referee.setup_board();
-}
-
-function sendScore() {
-    let name = document.getElementById('nickname').value;
-    referee.d.deliver(name, referee.seconds);
-    restartGame();
 }

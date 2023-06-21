@@ -48,7 +48,7 @@ class Board {
         canvas.style.height = this.canvasLength + "px";
         canvas.getContext('2d').scale(2, 2);
     }
-
+                
     // Make a 9x9 sqaure 
     // Every 3rd line is bold both vertically and horizontally
     drawGrid() {
@@ -136,15 +136,14 @@ class Board {
     }
 
     // From Chat
-    generateBoard() {
+    generateBoard(difficulty) {
         this.resetBoard();
         const board = this.board;
-
         // Start filling the board
         this.solveBoard(board, 0, 0);
 
         // Remove some numbers to create a puzzle
-        this.removeNumbers(board);
+        this.removeNumbers(board, difficulty);
 
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
@@ -209,8 +208,12 @@ class Board {
     }
 
     // From Chat
-    removeNumbers(board) {
-        const numToRemove = 1; // Adjust this number to control difficulty (default 40)
+    removeNumbers(board, difficulty) {
+        let numToRemove = 50; // Adjust this number to control difficulty (default 40)
+
+        if (difficulty === 'easy') { numToRemove = 40; }
+        if (difficulty === 'hard') { numToRemove = 70; }
+        if (difficulty === 'medium') { numToRemove = 55; }
 
         for (let i = 0; i < numToRemove; i++) {
             const row = this.getRandomInt(8);

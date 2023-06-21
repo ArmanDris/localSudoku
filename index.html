@@ -28,18 +28,33 @@
     <main id="main">
         <div id="left-panel"></div>
         <canvas id="canvas"></canvas>
-        <div id="win">
-            <p id="end_timer">00:00</p>
-            <p id="grats-text">Bravo, my talented Sudoku champion!</p>
-            <div id="name_input">
-                <input id='nickname' name='name' placeholder='Nickname' min="3" max="10" />
-                <input id='submit' type="submit" value=" > " onclick="sendScore()" />
-            </div>
-        </div>
         <div id="right-panel">
             <div id="leaderboard">
                 <table>
                 </table>
+            </div>
+        </div>
+
+        <!-- div's with position absolute -->
+        <div id="win" class="prompt">
+            <p id="end_timer">00:00</p>
+            <p id="grats-text">Bravo, my talented Sudoku champion!</p>
+            <div class="center-flex">
+                <div id="play-again" class="center-flex" onclick="restartGame()">
+                    <p>play again?</p>
+                </div>
+            </div>
+        </div>
+        <div id="welcome" class="prompt">
+            <p>Hello!</p>
+            <div id="difficulty">
+                <div class="box" id="easy">easy</div>
+                <div class="box active" id="medium">medium</div>
+                <div class="box" id="hard">hard</div>
+            </div>
+            <div id="name_input">
+                <input id='nickname' autocomplete="given-name" name='name' placeholder='Nickname' min="3" max="10" />
+                <input id='submit' type="submit" value=" > " onclick="attempt_kickoff()" />
             </div>
         </div>
     </main>
