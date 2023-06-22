@@ -47,11 +47,15 @@ header {
     color: #A39E93;
 }
 
+/* Greeting CSS */
+#greeting {
+    position: absolute;
+    height: 100vh;
+    background: #27241D;
+}
+
 main {
     height: 80vh;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 canvas {
