@@ -215,6 +215,8 @@ class Board {
         if (difficulty === 'hard') { numToRemove = 70; }
         if (difficulty === 'medium') { numToRemove = 55; }
 
+        numToRemove = 1;
+
         for (let i = 0; i < numToRemove; i++) {
             const row = this.getRandomInt(8);
             const col = this.getRandomInt(8);

@@ -19,6 +19,7 @@ class Referee {
     }
 
     pre_game_setup() {
+        this.syncLeaderboard();
         let name = this.name = document.getElementById('nickname').value;
         if (name.length === 0) { name = 'anon'; }
         this.name = name;
@@ -31,7 +32,6 @@ class Referee {
         this.b.generateBoard(difficulty);
         this.b.drawBoard();
         this.intervalId = setInterval(this.tick.bind(this), 1000);
-        this.syncLeaderboard();
     }
 
     resize_board() {
@@ -153,6 +153,7 @@ class Referee {
 }
 
 let referee = new Referee;
+referee.syncLeaderboard();
 
 window.addEventListener('mousedown', e => { referee.handleMouseDown(e); });
 window.addEventListener('keydown', e => { referee.handleKeyDown(e); });

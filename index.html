@@ -36,6 +36,7 @@
         </div>
 
         <!-- div's with position absolute -->
+        <!-- win popup -->
         <div id="win" class="prompt">
             <p id="end_timer">00:00</p>
             <p id="grats-text">Bravo, my talented Sudoku champion!</p>
@@ -45,6 +46,7 @@
                 </div>
             </div>
         </div>
+        <!-- welcome popup -->
         <div id="welcome" class="prompt">
             <p>Hello!</p>
             <div id="difficulty">
@@ -57,16 +59,16 @@
                 <input id='submit' type="submit" value=" > " onclick="attempt_kickoff()" />
             </div>
         </div>
+        <div id="collapse_elements">
+            <div id="collapse_header"></div>
+            <div id="collapse_container">
+                <canvas id="collapse"></canvas>
+            </div>
+            <div id="collapse_footer"></div>
+        </div>
     </main>
     <footer>
     </footer>
-    <div id="collapse_elements">
-        <div id="collapse_header"></div>
-        <div id="collapse_container">
-            <canvas id="collapse"></canvas>
-        </div>
-        <div id="collapse_footer"></div>
-    </div>
 </body>
 
 <script src="deliveryboy.js"></script>
