@@ -40,7 +40,6 @@ class DeliveryBoy {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.leaderboard);
         return data.leaderboard;
       }
       else {

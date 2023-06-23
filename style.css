@@ -10,66 +10,78 @@ body {
     font-weight: lighter;
 }
 
-header {
-    height: 10vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+h1 {
+    font-weight: lighter;
 }
 
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    width: 80vh;
-    color:#C7A86B;
-}
-
-.header-content-box {
-    width: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#timer {
-    font-weight: bold;
-    font-size: 24px;
-}
-
-#restart {
+.center-flex {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.box {
+    background: #27241D;
+    color: #FAF9F7;
+    padding: 10px 20px;
     cursor: pointer;
+    border: 1px #A39E93 solid;
+    border-radius: 15px;
     font-size: 18px;
-    color: #A39E93;
+    transition: 0.3s;
+}
+
+.box:not(:last-child) {
+    margin-right: 8px;
+}
+
+/*Note that the Referee class looks for this property so changing .active name will break code*/
+.difficulty-option.active {
+    border: 1px #C7A86B solid;
+    color: #C7A86B;
 }
 
 /* Greeting CSS */
 #greeting {
+    z-index: 2;
     position: absolute;
     height: 100vh;
+    width: 100vw;
     background: #27241D;
 }
 
-main {
-    height: 80vh;
+#greeting-inner-box {
+    width: 60%;
+    height: 50%;
 }
 
-canvas {
-    /*font-family: 'Nunito Sans';*/
-    padding: 0;
-    margin: auto;
-    display: block;
-
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+#greeting-inner-box > * {
+    padding: 40px;
 }
 
+#puckleton {
+    font-size: 72px;
+    font-weight: bold;
+}
+
+#greetings-inner-right-box > * {
+    margin: 10px 0;
+}
+
+#greetings-inner-right-box p {
+    margin-bottom: 26px;
+}
+
+#name-input {
+    justify-content: left;
+}
+
+#difficulty {
+    justify-content: left;
+}
+
+
+/* For things like win and start screen */
 .prompt {
     position: absolute;
     top: 50%;
@@ -87,87 +99,50 @@ canvas {
     text-align: center;
 }
 
-#end_timer {
-    margin-top: 15%;
-    font-size: 70px;
-    color: #C7A86B;
+/* Header CSS */
+header {
+    height: 10vh;
 }
 
-#grats-text {
-    margin-top: 5%;
-    font-size: 20px;
+.header-content {
+    justify-content: space-between;
+    width: 100%;
+    width: 80vh;
+    color:#C7A86B;
 }
 
-.center-flex {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.header-content-box {
+    width: 150px;
 }
 
-#play-again {
-    margin: 10% 0;
-    padding: 5%;
-    color: #FAF9F7;
-    border: 1px #FAF9F7 solid;
-    border-radius: 15px;
+#timer {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+#restart {
     cursor: pointer;
-    transition: 0.3s;
-}
-
-#play-again:hover {
-    border: 1px #C7A86B solid;
-    color: #C7A86B;
-}
-
-#welcome p {
-    margin: 5% 0 15% 0;
-}
-
-#difficulty {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    height: 20%;
-    margin: 5% 0;
-}
-
-.box {
-    padding: 10px 20px;
-    margin: 0 5px;
-    cursor: pointer;
-    border: 1px #A39E93 solid;
-    border-radius: 15px;
     font-size: 18px;
-    transition: 0.3s;
+    color: #A39E93;
 }
 
-/*Note that the Referee class looks for this property so changing .actives name will break code*/
-.box.active {
-    border: 2px #C7A86B solid;
-    color: #C7A86B;
+/* MAIN CSS */
+main {
+    height: 80vh;
 }
 
-#name_input {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 20%;
-    margin: 5% 0;
+canvas {
+    /*font-family: 'Nunito Sans';*/
+    margin: auto;
+    display: block;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
-#name_input input {
-    padding: 10px 20px;
-    margin: 5px;
-    color:#FAF9F7;
-    background: #27241D;
-    border: 1px#A39E93 solid;
-    border-radius: 10px;
-}
-
-#submit {
-    cursor: pointer;
-}
-
+/* Leaderboard CSS*/
 #leaderboard {
     position: absolute;
     top: 50%;
@@ -192,6 +167,38 @@ canvas {
 }
 
 #leaderboard tr:nth-child(even) {
+    color: #C7A86B;
+}
+
+/* Welcome CSS */
+#welcome p {
+    margin: 5% 0 15% 0;
+}
+
+/* Play again CSS */
+#end_timer {
+    margin-top: 15%;
+    font-size: 70px;
+    color: #C7A86B;
+}
+
+#grats-text {
+    margin-top: 5%;
+    font-size: 20px;
+}
+
+#play-again {
+    margin: 10% 0;
+    padding: 5%;
+    color: #FAF9F7;
+    border: 1px #FAF9F7 solid;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#play-again:hover {
+    border: 1px #C7A86B solid;
     color: #C7A86B;
 }
 

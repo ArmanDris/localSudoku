@@ -12,16 +12,35 @@
 </head>
 
 <body>
-    <header id="header">
-        <div class="header-content">
-            <div class="header-content-box">
+    <div id="greeting" class="center-flex">
+        <div id="greeting-inner-box" class="center-flex">
+            <div id="puckleton">^_^</div>
+            <div id="greetings-inner-right-box">
+                <h1>Hello!</h1>
+                <p>Choose a difficulty and nickname to get started.</p>
+                <div id="difficulty" class="center-flex">
+                    <div class="difficulty-option box" id="easy">easy</div>
+                    <div class="difficulty-option box active" id="medium">medium</div>
+                    <div class="difficulty-option box" id="hard">hard</div>
+                </div>
+                <div id="name-input" class="center-flex">
+                    <input id='nickname' class="box" autocomplete="given-name" name='name' placeholder='Nickname' min="3" max="10" />
+                    <input id='submit' class="box" type="submit" value=" > " onclick="kickoff()" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header id="header" class="center-flex">
+        <div class="header-content center-flex">
+            <div class="header-content-box center-flex">
                 <p>Sudoku</p>
             </div>
-            <div class="header-content-box">
+            <div class="header-content-box center-flex">
                 <p id="timer">00:00</p>
             </div>
-            <div class="header-content-box">
-                <img id="restart" src="refresh-gold.png" width="40px" onclick="restartGame()">
+            <div class="header-content-box center-flex">
+                <img id="restart" class="center-flex" src="refresh-gold.png" width="40px" onclick="restartGame()">
             </div>
         </div>
     </header>
@@ -34,6 +53,7 @@
             <table>
             </table>
         </div>
+
         <!-- win popup -->
         <div id="win" class="prompt">
             <p id="end_timer">00:00</p>
@@ -44,19 +64,7 @@
                 </div>
             </div>
         </div>
-        <!-- welcome popup -->
-        <div id="welcome" class="prompt">
-            <p>Hello!</p>
-            <div id="difficulty">
-                <div class="box" id="easy">easy</div>
-                <div class="box active" id="medium">medium</div>
-                <div class="box" id="hard">hard</div>
-            </div>
-            <div id="name_input">
-                <input id='nickname' autocomplete="given-name" name='name' placeholder='Nickname' min="3" max="10" />
-                <input id='submit' type="submit" value=" > " onclick="attempt_kickoff()" />
-            </div>
-        </div>
+
         <div id="collapse_elements">
             <div id="collapse_header"></div>
             <div id="collapse_container">

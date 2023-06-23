@@ -8,30 +8,26 @@ class Referee {
         this.d = new DeliveryBoy();
 
         this.win = document.getElementById('win');
-        this.welcome = document.getElementById('welcome');
+        this.greeting = document.getElementById('greeting');
         this.timer = document.getElementById('timer');
 
-        this.b.clearBoard();
-        this.b.drawBoard();
-
-        this.win.style.display = 'none';
-        this.welcome.style.display = 'block';
+        this.updateTimer();
+        this.hideWin();
+        this.showGreeting();
     }
 
-    pre_game_setup() {
-        this.syncLeaderboard();
+    start() {
         let name = this.name = document.getElementById('nickname').value;
         if (name.length === 0) { name = 'anon'; }
         this.name = name;
-        this.setup_board(this.getDifficulty());
 
-        this.welcome.style.display = 'none';
-    }
-
-    setup_board() {
-        this.b.generateBoard(difficulty);
+        this.b.clearBoard();
+        this.b.generateBoard(this.getDifficulty());
         this.b.drawBoard();
         this.intervalId = setInterval(this.tick.bind(this), 1000);
+
+        this.syncLeaderboard();
+        this.hideGreeting();
     }
 
     resize_board() {
@@ -42,12 +38,12 @@ class Referee {
     // ========== TIMER FUNCTIONS ==========
     tick() {
         this.seconds++;
-        this.timer.textContent = this.formatTime(this.seconds);
+        this.updateTimer();
     }
 
     stopTimer() {
         clearInterval(this.intervalId);
-        this.timer.textContent = this.formatTime(this.seconds);
+        this.updateTimer();
     }
 
     // ========== WIN LOGIC ==========
@@ -92,7 +88,7 @@ class Referee {
         let grats = document.getElementById('grats-text');
         grats.textContent = win_messages[this.b.getRandomInt(win_messages.length - 1)];
 
-        this.win.style.display = 'initial';
+        this.showWin();
     }
 
     async syncLeaderboard() {
@@ -120,7 +116,7 @@ class Referee {
 
     handleKeyDown(e) {
         if (e.key === ' ' && e.target == document.body) { e.preventDefault(); }
-        if (this.win.style.display !== 'none' || this.welcome.style.display !== 'none') { return; }
+        if (this.win.style.display !== 'none' || this.greeting.style.display !== 'none') { return; }
         this.b.handleKeyEvent(e);
         this.checkSolved();
     }
@@ -138,7 +134,6 @@ class Referee {
 
     getDifficulty() {
         let easy = document.getElementById('easy');
-        let medium = document.getElementById('medium');
         let hard = document.getElementById('hard');
 
         if (easy.classList.contains('active')) {
@@ -150,10 +145,16 @@ class Referee {
 
         return 'medium';
     }
+
+    updateTimer() { this.timer.textContent = this.formatTime(this.seconds); }
+    hideGreeting() { this.greeting.style.display = 'none'; }
+    showGreeting() { this.greeting.style.display = 'flex'; }
+    hideWin() { this.win.style.display = 'none'; }
+    showWin() { this.win.style.display = 'initial'; }
+    
 }
 
 let referee = new Referee;
-referee.syncLeaderboard();
 
 window.addEventListener('mousedown', e => { referee.handleMouseDown(e); });
 window.addEventListener('keydown', e => { referee.handleKeyDown(e); });
@@ -161,7 +162,7 @@ window.addEventListener('keydown', e => { referee.handleKeyDown(e); });
 window.addEventListener('resize', () => referee.resize_board(), false);
 
 // Difficulty button logic
-const boxes = document.querySelectorAll('.box');
+const boxes = document.querySelectorAll('.difficulty-option');
 boxes.forEach(box => {
     box.addEventListener('click', () => {
         // Remove active class from all boxes
@@ -172,11 +173,6 @@ boxes.forEach(box => {
     });
 });
 
-function attempt_kickoff() {
-    referee.pre_game_setup();
-}
+function kickoff() { referee.start(); }
 
-function restartGame() {
-    referee.stopTimer();
-    referee = new Referee;
-}
+function restartGame() { referee.stopTimer(); referee = new Referee; }

@@ -212,10 +212,8 @@ class Board {
         let numToRemove = 50; // Adjust this number to control difficulty (default 40)
 
         if (difficulty === 'easy') { numToRemove = 40; }
-        if (difficulty === 'hard') { numToRemove = 70; }
         if (difficulty === 'medium') { numToRemove = 55; }
-
-        numToRemove = 1;
+        if (difficulty === 'hard') { numToRemove = 70; }
 
         for (let i = 0; i < numToRemove; i++) {
             const row = this.getRandomInt(8);
