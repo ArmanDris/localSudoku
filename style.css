@@ -128,7 +128,7 @@ header {
 
 /* MAIN CSS */
 main {
-    height: 80vh;
+    height: 85vh;
 }
 
 canvas {
@@ -203,7 +203,7 @@ canvas {
 }
 
 footer {
-    height: 10vh;
+    height: 5vh;
 }
 
 #collapse_elements {

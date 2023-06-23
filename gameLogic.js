@@ -121,11 +121,6 @@ class Board {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    // ======== GETTERS & SETTERS =======
-    getValueOfCell(x, y) {
-        return this.board[x][y];
-    }
-
     // ======== START OF BOARD LOGIC =======
     resetBoard() {
         for (let x = 0; x < 9; x++) {
@@ -135,7 +130,6 @@ class Board {
         }
     }
 
-    // From Chat
     generateBoard(difficulty) {
         this.resetBoard();
         const board = this.board;
@@ -154,38 +148,34 @@ class Board {
         this.board = board;
     }
 
-    // From Chat
+    // Recursively generates board
     solveBoard(board, row, col) {
-        if (row === 9) {
-            return true; // Reached the end of the board
-        }
-
-        if (col === 9) {
-            return this.solveBoard(board, row + 1, 0); // Move to the next row
-        }
-
-        if (board[row][col] !== 0) {
-            return this.solveBoard(board, row, col + 1); // Cell already filled, move to the next column
-        }
+        // Reached the end of the board 
+        if (row === 9) { return true; }
+        // Move to the next row
+        if (col === 9) { return this.solveBoard(board, row + 1, 0); }
+        // Move to the next cell
+        if (board[row][col] !== 0) { return this.solveBoard(board, row, col + 1); }
 
         let nums = this.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
         for (let i = 0; i < 9; i++) {
             let num = nums[i];
+            // If num is a valid move then
             if (this.isValidMove(board, row, col, num)) {
                 board[row][col] = num;
-
+                // See if will result in a finished board
                 if (this.solveBoard(board, row, col + 1)) {
                     return true;
                 }
-
+                // If not then try next num
                 board[row][col] = 0; // Backtrack
             }
         }
 
+        // If try all nums and still stuck then return false
         return false;
     }
 
-    // From Chat
     isValidMove(board, row, col, num) {
         for (let i = 0; i < 9; i++) {
             if (board[row][i] === num || board[i][col] === num) {
@@ -207,7 +197,6 @@ class Board {
         return true;
     }
 
-    // From Chat
     removeNumbers(board, difficulty) {
         let numToRemove = 50; // Adjust this number to control difficulty (default 40)
 
