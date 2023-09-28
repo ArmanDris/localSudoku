@@ -14,20 +14,6 @@ c.execute('''CREATE TABLE IF NOT EXISTS leaderboard
 conn.commit()
 conn.close()
 
-# def placeOnLeaderboard(n, s):
-#     entry = [n, s]
-#     global leaderboard
-#     for i in leaderboard:
-#         if (s <= i[1]):
-#             #want to insert s before i
-#             leaderboard.insert(leaderboard.index(i), entry)
-#             return
-    
-    
-#     leaderboard.append(entry)
-        
-        
-
 @app.route('/mailbox', methods=['POST'])
 def handle_mail():
     conn = sqlite3.connect('leaderboard.db')

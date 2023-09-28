@@ -2,13 +2,19 @@
 <html lang="en">
 
 <head>
-    <title>Sudoku</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="style.css">
     <!--Prevent browser from caching-->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+
+    <title>Sudoku</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css">
+
+    <!--Load font-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -45,8 +51,8 @@
             </div>
         </div>
     </header>
-    <main id="main">
 
+    <main id="main">
         <canvas id="canvas"></canvas>
 
         <!-- leaderboard -->
