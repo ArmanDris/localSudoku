@@ -1,6 +1,6 @@
 class DeliveryBoy {
   deliver(name, score) {
-    const url = `http://23.16.237.88/mailbox`;
+    const url = `http://blueberrypie.myddns.me:5000/mailbox`;
 
     fetch(url, {
       method: 'POST',
@@ -27,7 +27,7 @@ class DeliveryBoy {
 
   async receive() {
     try {
-      const url = `http://23.16.237.88/leaderboard`;
+      const url = `http://blueberrypie.myddns.me:5000/leaderboard`;
 
       const response = await fetch(url, {
         method: 'POST',
