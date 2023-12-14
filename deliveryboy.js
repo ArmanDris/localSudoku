@@ -1,6 +1,6 @@
 class DeliveryBoy {
   deliver(name, score) {
-    const url = `http://127.0.0.1:5000/mailbox`;
+    const url = `http://23.16.237.88/mailbox`;
 
     fetch(url, {
       method: 'POST',
@@ -27,7 +27,7 @@ class DeliveryBoy {
 
   async receive() {
     try {
-      const url = `http://127.0.0.1:5000/leaderboard`;
+      const url = `http://23.16.237.88/leaderboard`;
 
       const response = await fetch(url, {
         method: 'POST',
