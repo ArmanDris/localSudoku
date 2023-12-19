@@ -55,7 +55,7 @@ class DeliveryBoy {
 	}
 
 	async handleLocalServer() {
-		let local_url = 'http://192.168.1.75:443';
+		let local_url = 'https://192.168.1.75:443';
 		try {
 			const response = await fetch(local_url + '/leaderboard');
 			if (response.ok)
