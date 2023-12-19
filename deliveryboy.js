@@ -1,5 +1,5 @@
 class DeliveryBoy {
-	url = 'https://blueberrypie.myddns.me:5000'
+	url = 'https://blueberrypie.myddns.me:443'
 
 	async deliver(name, score) {
 
@@ -55,7 +55,7 @@ class DeliveryBoy {
 	}
 
 	async handleLocalServer() {
-		let local_url = 'http://192.168.1.75:5000';
+		let local_url = 'http://192.168.1.75:443';
 		try {
 			const response = await fetch(local_url + '/leaderboard');
 			if (response.ok)
