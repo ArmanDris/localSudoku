@@ -14,6 +14,10 @@ c.execute('''CREATE TABLE IF NOT EXISTS leaderboard
 conn.commit()
 conn.close()
 
+@app.route('/')
+def home_page():
+    return "Hello world!"
+
 @app.route('/mailbox', methods=['POST'])
 def handle_mail():
     conn = sqlite3.connect('leaderboard.db')
@@ -54,6 +58,6 @@ def send_leaderboard():
         return jsonify('error', 'internal server error'), 500
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port = 443,
+    app.run(host='0.0.0.0', port = 443,
             ssl_context=('/etc/letsencrypt/live/blueberrypie.myddns.me/fullchain.pem',
                          '/etc/letsencrypt/live/blueberrypie.myddns.me/privkey.pem'))
