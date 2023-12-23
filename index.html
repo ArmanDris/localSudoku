@@ -8,8 +8,8 @@
     <meta http-equiv="Expires" content="0">
 
     <title>Sudoku</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="style/favicon.ico">
+    <link rel="stylesheet" href="style/style.css">
 
     <!--Load font-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,7 +47,7 @@
                 <p id="timer">00:00</p>
             </div>
             <div class="header-content-box center-flex">
-                <img id="restart" class="center-flex" src="refresh-gold.png" width="40px" onclick="restartGame()">
+                <img id="restart" class="center-flex" src="style/refresh-gold.png" width="40px" onclick="restartGame()">
             </div>
         </div>
     </header>
@@ -72,7 +72,7 @@
             </div>
         </div>
 
-        <div id="collapse_elements">
+        <div id="se_elements">
             <div id="collapse_header"></div>
             <div id="collapse_container">
                 <canvas id="collapse"></canvas>
@@ -84,9 +84,9 @@
     </footer>
 </body>
 
-<script src="deliveryboy.js"></script>
-<script src="gameLogic.js"></script>
-<script src="collapse.js"></script>
-<script src="windowLogic.js"></script>
+<script src="scripts/DeliveryBoy.js"></script>
+<script src="scripts/Board.js"></script>
+<script src="scripts/Referee.js"></script>
+<script src="scripts/Tests.js"></script>
 
 </html>

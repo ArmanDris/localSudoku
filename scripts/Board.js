@@ -48,7 +48,7 @@ class Board {
         canvas.style.height = this.canvasLength + "px";
         canvas.getContext('2d').scale(2, 2);
     }
-                
+
     // Make a 9x9 sqaure 
     // Every 3rd line is bold both vertically and horizontally
     drawGrid() {
@@ -145,6 +145,8 @@ class Board {
             }
         }
 
+
+
         this.board = board;
     }
 
@@ -174,6 +176,34 @@ class Board {
 
         // If try all nums and still stuck then return false
         return false;
+    }
+
+    getPossibleMoves(board, x, y)
+    {
+        let possibilities = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+        // Remove numbers in mini grid
+        let mini_grid_x = x - (x % 3);
+        let mini_grid_y = y - (y % 3);
+        for (let i = 0; i < 3; i++)
+            for (let j = 0; j < 3; j++)
+                possibilities = this.remove(possibilities, Math.abs(board[mini_grid_x+i][mini_grid_y+j]));
+        
+        // Remove numbers in row
+        for (let i = 0; i < 9; i++)
+            possibilities = this.remove(possibilities, Math.abs(board[i][y]));
+
+        // Remove numbers in column
+        for (let i = 0; i < 9; i++)
+            possibilities = this.remove(possibilities, Math.abs(board[x][i]));
+
+        return possibilities;
+    }
+
+    numSolutions(board) 
+    {
+        if (this.checkSolved(board)) return 0;
+        // if (!this.solveBoard(board, 0, 0)) return 0; // Will take a really really long time ...
     }
 
     isValidMove(board, row, col, num) {
@@ -212,23 +242,23 @@ class Board {
         }
     }
 
-    // True if x, y is valud and nonzero
-    validNum(x, y) {
+    // True if x, y is valid and nonzero
+    validNum(board, x, y) {
         // Num must be only one of its kind on its row, column and mini box
-        let num = this.board[x][y];
+        let num = board[x][y];
 
         if (num === this.blankNum) return false;
 
         // Check valid row
         for (let j = 0; j < 9; j++) {
-            if (j !== x && Math.abs(this.board[j][y]) === Math.abs(num)) {
+            if (j !== x && Math.abs(board[j][y]) === Math.abs(num)) {
                 return false;
             }
         }
 
         // Check valid Column
         for (let j = 0; j < 9; j++) {
-            if (j !== y && Math.abs(this.board[x][j]) === Math.abs(num)) {
+            if (j !== y && Math.abs(board[x][j]) === Math.abs(num)) {
                 return false;
             }
         }
@@ -242,12 +272,24 @@ class Board {
 
         for (let j = startingX; j < startingX + 3; j++) {
             for (let k = startingY; k < startingY + 3; k++) {
-                if (j !== x && k !== y && Math.abs(this.board[j][k]) === Math.abs(num)) {
+                if (j !== x && k !== y && Math.abs(board[j][k]) === Math.abs(num)) {
                     return false;
                 }
             }
         }
 
+        return true;
+    }
+
+    checkSolved(board) {
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
+                if (!this.validNum(board, x, y)) {
+                    return false;
+                }
+            }
+        }
+        
         return true;
     }
 
@@ -307,13 +349,14 @@ class Board {
         if (this.receiveInput == false) return;
 
         // If key not 1-9 or SPACE then return
-        if (!/^[1-9 ]$/i.test(e.key)) return;
+        if (!/^[0-9 ]|^Backspace$/i.test(e.key)) return;
 
         // Check if trying to change starting num
         if (this.board[this.currentSquareX][this.currentSquareY] < 0) return;
 
         let num = 0;
         if (e.key === " ") { num = 0; }
+        else if (e.key === 'Backspace') { num = 0; }
         else { num = parseInt(e.key); }
 
         this.board[this.currentSquareX][this.currentSquareY] = num;
@@ -333,4 +376,12 @@ class Board {
         }
         return temp;
     }
+
+    remove(arr, value) {
+        var index = arr.indexOf(value);
+        if (index > -1) 
+            arr.splice(index, 1);
+        return arr;
+    }
+      
 }

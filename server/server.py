@@ -10,7 +10,7 @@ conn = sqlite3.connect('leaderboard.db')
 c = conn.cursor()
 
 c.execute('''CREATE TABLE IF NOT EXISTS leaderboard
-             (name TEXT, score INTEGER)''')
+             (name TEXT, time INTEGER, difficulty TEXT)''')
 conn.commit()
 conn.close()
 
@@ -20,20 +20,21 @@ def handle_mail():
     c = conn.cursor()
     try:
         name = request.json['name']
-        score = str(request.json['score'])
+        time = int(request.json['time'])
+        difficulty = request.json['difficulty']
 
-        if not name or not score:
+        if not name or not time or not difficulty:
             return jsonify({'error': 'Missing JSON data'}), 400
         
-        print(name + " got " + score)
+        print(name + " got " + str(time) + " on " + difficulty)
 
-        c.execute("INSERT INTO leaderboard (name, score) VALUES (?, ?)", (name, score))
+        c.execute("INSERT INTO leaderboard (name, time, difficulty) VALUES (?, ?, ?)", (name, time, difficulty))
         conn.commit()
         conn.close()
-        return jsonify({'message': (name + " got " + score)}), 200
+        return jsonify({'message': (name + " got " + str(time) + " on " + difficulty)}), 200
     
     except Exception as e:
-        print('An error occured %s', str(e))
+        print(f'An error occurred: {e}')
         conn.close()
         return jsonify({'error': 'Internal Server Error'}), 500
     
@@ -42,7 +43,7 @@ def send_leaderboard():
     conn = sqlite3.connect('leaderboard.db')
     c = conn.cursor()
     try:
-        c.execute("SELECT name, score FROM leaderboard ORDER BY score ASC LIMIT 5")
+        c.execute("SELECT name, time, difficulty FROM leaderboard ORDER BY time ASC LIMIT 5")
         rows = c.fetchall()
         conn.close()
         return jsonify({'leaderboard': rows}), 200
@@ -53,6 +54,6 @@ def send_leaderboard():
         return jsonify('error', 'internal server error'), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port = 443,
+    app.run(host='127.0.0.1', port = 443,
             ssl_context=('/etc/letsencrypt/live/blueberrypie.myddns.me/fullchain.pem',
                          '/etc/letsencrypt/live/blueberrypie.myddns.me/privkey.pem'))
