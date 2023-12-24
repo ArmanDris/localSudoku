@@ -49,7 +49,7 @@ class Referee {
     // ========== WIN LOGIC ==========
     checkSolved() 
     {
-        if (this.b.checkSolved(this.b.board))
+        if (BoardSolver.checkSolved(this.b.board))
             this.trigger_victory();
     }
 
@@ -80,7 +80,7 @@ class Referee {
         timer.textContent = this.formatTime(this.seconds);
 
         let grats = document.getElementById('grats-text');
-        grats.textContent = win_messages[this.b.getRandomInt(win_messages.length - 1)];
+        grats.textContent = win_messages[BoardSolver.getRandomInt(win_messages.length - 1)];
 
         this.showWin();
     }

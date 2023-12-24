@@ -122,88 +122,19 @@ class Board {
     }
 
     // ======== START OF BOARD LOGIC =======
-    resetBoard() {
-        for (let x = 0; x < 9; x++) {
-            for (let y = 0; y < 9; y++) {
-                this.board[x][y] = this.blankNum;
-            }
-        }
-    }
 
     generateBoard(difficulty) {
-        this.resetBoard();
-        const board = this.board;
-        // Start filling the board
-        this.solveBoard(board, 0, 0);
+        this.board = BoardSolver.createBoard(this.board, difficulty);
+    }
 
-        // Remove some numbers to create a puzzle
-        this.removeNumbers(board, difficulty);
-
-        for (let x = 0; x < 9; x++) {
-            for (let y = 0; y < 9; y++) {
-                board[x][y] = -board[x][y];
+    isSolvable(board) {
+        for (let i = 0; i < 9; i++) for (let j = 0; j < 9; j++)
+            if (!this.validNum(board, i, j) && board[i][j] !== 0) {
+                console.log(i + " " + j + " is invalid: " + board[i][j]);
+                return false;
             }
-        }
 
-
-
-        this.board = board;
-    }
-
-    // Recursively generates board
-    solveBoard(board, row, col) {
-        // Reached the end of the board 
-        if (row === 9) { return true; }
-        // Move to the next row
-        if (col === 9) { return this.solveBoard(board, row + 1, 0); }
-        // Move to the next cell
-        if (board[row][col] !== 0) { return this.solveBoard(board, row, col + 1); }
-
-        let nums = this.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-        for (let i = 0; i < 9; i++) {
-            let num = nums[i];
-            // If num is a valid move then
-            if (this.isValidMove(board, row, col, num)) {
-                board[row][col] = num;
-                // See if will result in a finished board
-                if (this.solveBoard(board, row, col + 1)) {
-                    return true;
-                }
-                // If not then try next num
-                board[row][col] = 0; // Backtrack
-            }
-        }
-
-        // If try all nums and still stuck then return false
-        return false;
-    }
-
-    getPossibleMoves(board, x, y)
-    {
-        let possibilities = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-        // Remove numbers in mini grid
-        let mini_grid_x = x - (x % 3);
-        let mini_grid_y = y - (y % 3);
-        for (let i = 0; i < 3; i++)
-            for (let j = 0; j < 3; j++)
-                possibilities = this.remove(possibilities, Math.abs(board[mini_grid_x+i][mini_grid_y+j]));
-        
-        // Remove numbers in row
-        for (let i = 0; i < 9; i++)
-            possibilities = this.remove(possibilities, Math.abs(board[i][y]));
-
-        // Remove numbers in column
-        for (let i = 0; i < 9; i++)
-            possibilities = this.remove(possibilities, Math.abs(board[x][i]));
-
-        return possibilities;
-    }
-
-    numSolutions(board) 
-    {
-        if (this.checkSolved(board)) return 0;
-        // if (!this.solveBoard(board, 0, 0)) return 0; // Will take a really really long time ...
+        return true;
     }
 
     isValidMove(board, row, col, num) {
@@ -224,72 +155,6 @@ class Board {
             }
         }
 
-        return true;
-    }
-
-    removeNumbers(board, difficulty) {
-        let numToRemove = 50; // Adjust this number to control difficulty (default 40)
-
-        if (difficulty === 'easy') { numToRemove = 40; }
-        if (difficulty === 'medium') { numToRemove = 55; }
-        if (difficulty === 'hard') { numToRemove = 70; }
-
-        for (let i = 0; i < numToRemove; i++) {
-            const row = this.getRandomInt(8);
-            const col = this.getRandomInt(8);
-
-            board[row][col] = 0;
-        }
-    }
-
-    // True if x, y is valid and nonzero
-    validNum(board, x, y) {
-        // Num must be only one of its kind on its row, column and mini box
-        let num = board[x][y];
-
-        if (num === this.blankNum) return false;
-
-        // Check valid row
-        for (let j = 0; j < 9; j++) {
-            if (j !== x && Math.abs(board[j][y]) === Math.abs(num)) {
-                return false;
-            }
-        }
-
-        // Check valid Column
-        for (let j = 0; j < 9; j++) {
-            if (j !== y && Math.abs(board[x][j]) === Math.abs(num)) {
-                return false;
-            }
-        }
-
-        // Check valid mini box
-        let miniGridX = Math.floor(x / 3);
-        let miniGridY = Math.floor(y / 3);
-
-        let startingX = miniGridX * 3;
-        let startingY = miniGridY * 3;
-
-        for (let j = startingX; j < startingX + 3; j++) {
-            for (let k = startingY; k < startingY + 3; k++) {
-                if (j !== x && k !== y && Math.abs(board[j][k]) === Math.abs(num)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    checkSolved(board) {
-        for (let x = 0; x < 9; x++) {
-            for (let y = 0; y < 9; y++) {
-                if (!this.validNum(board, x, y)) {
-                    return false;
-                }
-            }
-        }
-        
         return true;
     }
 
@@ -362,26 +227,4 @@ class Board {
         this.board[this.currentSquareX][this.currentSquareY] = num;
         this.selectSquare();
     }
-
-    // ========== MISC FUNCTIONS ==========
-    getRandomInt(max) { return Math.floor(Math.random() * (max + 1)); }
-
-    shuffle(arr) {
-        let temp = [];
-
-        for (let i = arr.length; i > 0; i--) {
-            let random_index = this.getRandomInt(i - 1);
-            temp.push(arr[random_index]);
-            arr.splice(random_index, 1);
-        }
-        return temp;
-    }
-
-    remove(arr, value) {
-        var index = arr.indexOf(value);
-        if (index > -1) 
-            arr.splice(index, 1);
-        return arr;
-    }
-      
 }

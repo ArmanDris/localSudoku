@@ -1,7 +1,24 @@
 class DeliveryBoy {
-	url = 'https://blueberrypie.myddns.me:443'
+	default_url = 'https://blueberrypie.myddns.me:443';
+	local_url = "http://127.0.0.1:80";
+
+	url;
+
+	async setURL() 
+	{
+		try {
+			const response = await fetch(this.default_url + '/ping');
+			if (response.ok)
+				this.url = this.default_url;
+		} catch (error) {
+			this.url = this.local_url;
+		}
+	}
 
 	async deliver(name, time, difficulty) {
+
+		if (!this.url)
+			this.setURL();
 
 		fetch(this.url + '/mailbox', {
 			method: 'POST',
@@ -27,6 +44,10 @@ class DeliveryBoy {
 	}
 
 	async receive() {
+
+		if (!this.url) 
+			this.setURL();
+
 		try {
 			const response = await fetch(this.url + '/leaderboard', {
 				method: 'POST',
