@@ -46,7 +46,7 @@ class DeliveryBoy {
 	async receive() {
 
 		if (!this.url) 
-			this.setURL();
+			await this.setURL();
 
 		try {
 			const response = await fetch(this.url + '/leaderboard', {
