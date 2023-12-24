@@ -18,7 +18,7 @@ class DeliveryBoy {
 	async deliver(name, time, difficulty) {
 
 		if (!this.url)
-			this.setURL();
+			await this.setURL();
 
 		fetch(this.url + '/mailbox', {
 			method: 'POST',
