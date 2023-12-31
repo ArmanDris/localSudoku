@@ -93,7 +93,15 @@ class Referee {
             for (let i = 0; i < leaderboard.length; i++) {
                 let name = leaderboard[i][0];
                 let time = leaderboard[i][1];
-                table +=  "<tr> <td>" + name + "</td>" + "<td>" + this.formatTime(time) + "</td> </tr>";
+                let difficulty = leaderboard[i][2];
+                console.log(difficulty);
+                let font = "default";
+                switch(difficulty) {
+                    case('easy'): font = "'Comic Sans MS', cursive, sans-serif"; break;
+                    case('medium'): font = "default"; break;
+                    case('hard'): font = "times"; break;
+                }
+                table +=  '<tr style="font-family:' + font + ';"> <td>' + name + '</td>' + '<td>' + this.formatTime(time) + '</td> </tr>';
             }
             table += "</table>";
             document.querySelector("#leaderboard table").innerHTML = table;

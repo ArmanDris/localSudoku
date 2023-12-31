@@ -99,7 +99,7 @@ class BoardTest {
             [5, 6, 7, 8, 9, 1, 2, 3, 4],
             [2, 3, 4, 5, 6, 7, 8, 9, 1]
         ];
-        if (BoardSolver.numSolutions(solved_b.board) !== 0) {
+        if (BoardSolver.numSolutions(solved_b.board) !== 1) {
             console.error("Error: numSolutions returned unexpected value");
             console.log(BoardSolver.numSolutions(solved_b.board));
         }
@@ -114,7 +114,7 @@ class BoardTest {
             [3, 4, 5, 6, 7, 8, 9, 1, 2],
             [8, 9, 1, 2, 3, 4, 5, 6, 7],
             [5, 6, 7, 8, 9, 1, 2, 3, 4],
-            [2, 3, 4, 5, 6, 7, 8, 9, 9]
+            [2, 3, 4, 5, 6, 7, 8, 9, 9]  // the 2nd 9 is invalid
         ];
 
         if (BoardSolver.numSolutions(impossible_b.board) !== 0) {
@@ -139,6 +139,20 @@ class BoardTest {
             console.error("Error: numSolutions returned unexpected value");
             console.log(BoardSolver.numSolutions(almost_b.board));
         }
+
+        let many_b = new Board();
+        many_b = [
+            [1, 2, 3, 0, 0, 0, 0, 0, 0],
+            [4, 5, 6, 0, 0, 0, 0, 0, 0],
+            [7, 8, 9, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ];
+        console.log(BoardSolver.numSolutions(many_b));
 
     }
 

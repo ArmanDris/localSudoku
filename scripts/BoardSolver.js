@@ -84,6 +84,34 @@ class BoardSolver {
     // Helpers
     // ============================
 
+    // If board is already solved return 1
+    static numSolutions(board) {
+        // Reached the end of the board 
+        if (y === 9) { return 1; }
+        // Move to the next row
+        if (x === 9) { return this.fillOutBoard(board, 0, y + 1); }
+        // Move to the next cell
+        if (board[x][y] !== 0) { return this.fillOutBoard(board, y, col + 1); }
+
+        let nums = this.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        for (let i = 0; i < 9; i++) {
+            let num = nums[i];
+            // If num is a valid move then
+            if (this.isValidMove(board, x, y, num)) {
+                board[x][y] = num;
+                // See if will result in a finished board
+                if (this.fillOutBoard(board, x + 1, y)) {
+                    return true;
+                }
+                // If not then try next num
+                board[x][y] = 0; // Backtrack
+            }
+        }
+
+        // If try all nums and still stuck then return false
+        return 0;
+    }
+
     static removeNumbers(board, difficulty) {
         let numToRemove = 50; // Adjust this number to control difficulty (default 40)
 
