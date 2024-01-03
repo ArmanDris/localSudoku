@@ -1,6 +1,6 @@
 class DeliveryBoy {
 	public_url = 'https://blueberrypie.myddns.me:443';
-	local_url = "https://192.168.1.75:443";
+	local_url = "http://192.168.1.75:80";
 
 	url;
 

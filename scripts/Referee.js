@@ -94,7 +94,6 @@ class Referee {
                 let name = leaderboard[i][0];
                 let time = leaderboard[i][1];
                 let difficulty = leaderboard[i][2];
-                console.log(difficulty);
                 let font = "default";
                 switch(difficulty) {
                     case('easy'): font = "'Comic Sans MS', cursive, sans-serif"; break;
