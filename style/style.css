@@ -150,7 +150,6 @@ canvas {
     right: 5%;
     transform: translate(-0%, -50%);
 
-    height: 50vh;
     width: 30vh;
 }
 
@@ -163,8 +162,7 @@ canvas {
 }
 
 #leaderboard tr {
-    height: calc(100% / 5);
-    /* Divide the height equally among 5 rows */
+    height: 50px;
 }
 
 #leaderboard tr:nth-child(even) {
