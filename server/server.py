@@ -51,7 +51,7 @@ def send_leaderboard():
     conn = sqlite3.connect('leaderboard.db')
     c = conn.cursor()
     try:
-        c.execute("SELECT name, time, difficulty FROM leaderboard ORDER BY time ASC LIMIT 5")
+        c.execute("SELECT name, time, difficulty FROM leaderboard ORDER BY time ASC LIMIT 15")
         rows = c.fetchall()
         conn.close()
         return jsonify({'leaderboard': rows}), 200
