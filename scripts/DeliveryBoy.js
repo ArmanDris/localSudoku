@@ -1,17 +1,17 @@
 class DeliveryBoy {
-	public_url = 'https://blueberrypie.myddns.me:443';
-	local_url = "https://192.168.1.75:443";
+	default_url = 'https://blueberrypie.myddns.me:443';
+	backup_url = 'https://192.168.1.75:443';
 
 	url;
 
 	async setURL() 
 	{
 		try {
-			const response = await fetch(this.local_url + '/ping');
+			const response = await fetch(this.default_url + '/ping');
 			if (response.ok)
-				this.url = this.local_url;
+				this.url = this.default_url;
 		} catch (error) {
-			this.url = this.public_url;
+			this.url = this.backup_url;
 		}
 	}
 
