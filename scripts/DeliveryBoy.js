@@ -1,5 +1,5 @@
 class DeliveryBoy {
-	default_url = 'https://blueberrypie.myddns.me:443';
+	default_url = 'https://strawberry.ddns.net:443';
 	backup_url = 'https://192.168.1.75:443';
 
 	url;
