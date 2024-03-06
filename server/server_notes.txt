@@ -11,8 +11,7 @@ To install & update DUC:  (https://www.noip.com/support/knowledgebase/installing
     - /usr/local/bin/noip2 -C
     - /usr/local/bin/noip2
 
-
-To get SSL certificate: sudo certbot certonly --standalone -d blueberrypie.myddns.me
+To get SSL certificate: sudo certbot renew --nginx
 
 Expiration dates:
 HTTPS Certificate: Jun 6 2024
