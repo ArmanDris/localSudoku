@@ -1,8 +1,7 @@
-# To Run: python3 server.py
-# To get SSL certificate: sudo certbot certonly --standalone -d blueberrypie.myddns.me
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sqlite3
+from flask import send_from_directory
 
 app = Flask(__name__)
 CORS(app)
@@ -22,6 +21,10 @@ def home_page():
 @app.route('/ping')
 def handle_ping():
     return jsonify({'message':'ok'}), 200
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('.', 'strawberry.png', mimetype='image/png')
 
 @app.route('/mailbox', methods=['POST'])
 def handle_mail():
