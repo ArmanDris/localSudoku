@@ -1,4 +1,5 @@
 # To Run: python3 server.py
+# To get SSL certificate: sudo certbot certonly --standalone -d blueberrypie.myddns.me
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sqlite3
@@ -62,6 +63,10 @@ def send_leaderboard():
         return jsonify('error', 'internal server error'), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port = 443,
-            ssl_context=('/etc/letsencrypt/live/blueberrypie.myddns.me/fullchain.pem',
-                         '/etc/letsencrypt/live/blueberrypie.myddns.me/privkey.pem'))
+    app.run(
+        host='0.0.0.0', 
+        port=443, 
+        ssl_context=('/etc/letsencrypt/live/strawberry.ddns.net/fullchain.pem', 
+                     '/etc/letsencrypt/live/strawberry.ddns.net/privkey.pem')
+        )
+
