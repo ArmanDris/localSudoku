@@ -1,3 +1,6 @@
+To run server:
+sudo gunicorn --bind 0.0.0.0:443 server:app
+
 To install & update DUC:  (https://www.noip.com/support/knowledgebase/installing-the-linux-dynamic-update-client)
   - login as root (sudo su -)
   - run the following commands to install:
