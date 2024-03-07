@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import sqlite3
+from os import path
 
 app = Flask(__name__)
 CORS(app)
@@ -15,16 +16,12 @@ conn.close()
 
 @app.route('/')
 def home_page():
-    current_directory = os.path.dirname(os.path.abspath(__file__))
+    current_directory = path.dirname(path.abspath(__file__))
     return send_from_directory(current_directory, 'index.html')
 
 @app.route('/ping')
 def handle_ping():
     return jsonify({'message':'ok'}), 200
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory('.', 'strawberry.png', mimetype='image/png')
 
 @app.route('/mailbox', methods=['POST'])
 def handle_mail():
