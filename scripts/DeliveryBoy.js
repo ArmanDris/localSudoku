@@ -1,17 +1,17 @@
 class DeliveryBoy {
-	default_url = 'https://strawberry.ddns.net:443';
-	backup_url = 'https://192.168.1.99:443';
+	public_url = 'https://strawberry.ddns.net:443';
+	local_url = 'http://192.168.1.99:8000';
 
 	url;
 
 	async setURL() 
 	{
 		try {
-			const response = await fetch(this.default_url + '/ping');
+			const response = await fetch(this.public_url + '/ping');
 			if (response.ok)
-				this.url = this.default_url;
+				this.url = this.public_url;
 		} catch (error) {
-			this.url = this.backup_url;
+			this.url = this.local_url;
 		}
 	}
 
