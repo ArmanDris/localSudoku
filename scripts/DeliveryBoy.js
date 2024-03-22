@@ -1,6 +1,7 @@
 class DeliveryBoy {
-	public_url = 'https://strawberry.ddns.net:443';
-	local_url = 'http://192.168.1.99:8000';
+	public_url = 'https://strawberry.ddns.net';
+	local_url = 'https://cors-anywhere.herokuapp.com/https://strawberry.ddns.net';
+	// Get access to demo server at: https://cors-anywhere.herokuapp.com/corsdemo
 
 	url;
 
