@@ -3,7 +3,7 @@ class DeliveryBoy {
 
 	async deliver(name, time, difficulty) {
 
-		fetch(this.url + '/mailbox', {
+		fetch(this.server + '/mailbox', {
 			method: 'POST',
 			mode: 'cors',
 			cache: 'no-store',
@@ -29,7 +29,7 @@ class DeliveryBoy {
 	async receive() {
 
 		try {
-			const response = await fetch(this.url + '/leaderboard', {
+			const response = await fetch(this.server + '/leaderboard', {
 				method: 'POST',
 				mode: 'cors',
 				cache: 'no-store',
