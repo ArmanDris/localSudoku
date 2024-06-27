@@ -1,5 +1,5 @@
 class DeliveryBoy {
-	server = 'http://strawberrypie.drismir.ca';
+	server = 'https://strawberrypie.drismir.ca';
 
 	async deliver(name, time, difficulty) {
 
