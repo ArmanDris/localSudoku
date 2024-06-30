@@ -1,6 +1,6 @@
 # Sudoku
 
-Play this game [here](https://armandris.github.io/Sudoku/index.html).
+[Play this game here](https://sudoku.drismir.ca).
 
 # About
 
