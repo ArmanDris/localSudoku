@@ -90,6 +90,7 @@ class Referee {
             const leaderboard = await this.d.receive();
 
             let table = "<table>";
+            table += '<tr> <th>Name</td> <th>Time</th> </tr>';
             for (let i = 0; i < leaderboard.length; i++) {
                 let name = leaderboard[i][0];
                 let time = leaderboard[i][1];
