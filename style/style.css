@@ -46,7 +46,7 @@ h1 {
 
 /* Greeting CSS */
 #greeting {
-    z-index: 2;
+    z-index: 20;
     position: absolute;
     height: 100vh;
     width: 100%;
@@ -138,24 +138,28 @@ main {
     position: absolute;
     top: 32px;
     left: 32px;
+    z-index: 1;
 }
 
 #math-bear-img {
     position: absolute;
     bottom: 32px;
     right: 32px;
+    z-index: 1;
 }
 
 #beaker-img {
     position: absolute;
     top: 32px;
     right: 64px;
+    z-index: 1;
 }
 
 #atom-img {
     position: absolute;
     bottom: 92px;
     left: 64px;
+    z-index: 1;
 }
 
 canvas {
@@ -172,10 +176,14 @@ canvas {
 #leaderboard {
     position: absolute;
     top: 50%;
-    right: 5%;
+    right: 0;
     transform: translate(-0%, -50%);
 
     width: 30vh;
+    padding: 5vh;
+
+    background: #27241d91;
+    z-index: 5;
 }
 
 #leaderboard h1 {
